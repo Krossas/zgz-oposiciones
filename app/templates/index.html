@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oposiciones · Ayuntamiento de Zaragoza</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --zgz-azul:    #1a3a6b;
+      --zgz-claro:   #2651a0;
+      --zgz-oro:     #e8a020;
+    }
+
+    body { background: #f4f6f9; }
+
+    /* Navbar */
+    .navbar { background: var(--zgz-azul) !important; }
+    .navbar-brand { font-weight: 700; letter-spacing: -.3px; }
+    .btn-scrape { background: var(--zgz-oro); border: none; color: #fff; font-weight: 600; }
+    .btn-scrape:hover { background: #d4921a; color: #fff; }
+    .btn-scrape:disabled { opacity: .65; }
+
+    /* Tarjetas de estadísticas */
+    .stat-card { border: none; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+    .stat-card .stat-valor { font-size: 2rem; font-weight: 800; color: var(--zgz-azul); }
+    .stat-card .stat-label { font-size: .75rem; text-transform: uppercase;
+                              letter-spacing: .5px; color: #6c757d; }
+
+    /* Barra de progreso de scraping */
+    #barra-progreso .progress-bar { background: var(--zgz-oro); }
+
+    /* Tabla */
+    .table th { background: var(--zgz-azul); color: #fff; font-size: .8rem;
+                text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+    .table th.sortable { cursor: pointer; user-select: none; }
+    .table th.sortable:hover { background: var(--zgz-claro); }
+    .table td { vertical-align: middle; font-size: .875rem; }
+    .fila-clickable { cursor: pointer; transition: background .1s; }
+    .fila-clickable:hover td { background: #eef2ff; }
+
+    /* Badges de estado */
+    .badge-estado { font-size: .75rem; font-weight: 600; }
+
+    /* Tabs de año */
+    .anio-tab { cursor: pointer; font-size: .8rem; font-weight: 600; }
+    .anio-tab.activo { background: var(--zgz-azul) !important; color: #fff !important; border-color: var(--zgz-azul) !important; }
+
+    /* Panel de detalle (offcanvas) */
+    .offcanvas { width: 520px !important; }
+    .offcanvas-header { background: var(--zgz-azul); color: #fff; }
+    .offcanvas-header .btn-close { filter: invert(1); }
+    .campo-label { font-size: .7rem; text-transform: uppercase;
+                   letter-spacing: .5px; color: #6c757d; margin-bottom: 2px; }
+    .campo-valor { font-size: .9rem; font-weight: 500; }
+
+    /* Anuncios */
+    .anuncio-fecha { font-size: .75rem; color: #6c757d; white-space: nowrap; min-width: 80px; }
+    .anuncio-texto { font-size: .85rem; }
+
+    /* Frecuencia */
+    .freq-card { border-radius: 8px; border: 1px solid #dee2e6;
+                 transition: box-shadow .15s; cursor: default; }
+    .freq-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+    .freq-barra { height: 6px; background: var(--zgz-azul); border-radius: 3px; }
+
+    /* Log de errores */
+    #panel-log .log-entry { font-size: .8rem; font-family: monospace;
+                            padding: 4px 0; border-bottom: 1px solid #f0f0f0; }
+    #panel-log .log-entry:last-child { border-bottom: none; }
+    #panel-log .log-error { color: #dc3545; }
+    #panel-log .log-info  { color: #0d6efd; }
+
+    /* Estados vacíos */
+    .empty-state { padding: 60px 20px; text-align: center; color: #6c757d; }
+    .empty-state i { font-size: 3rem; margin-bottom: 12px; display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ──────────────────────────────────────────────────────────────── -->
+<nav class="navbar navbar-dark sticky-top shadow-sm">
+  <div class="container-fluid">
+    <span class="navbar-brand">
+      <i class="bi bi-building me-2"></i>Oposiciones Zaragoza
+    </span>
+    <div class="d-flex align-items-center gap-3">
+      <small class="text-white-50" id="txt-ultimo-scrape"></small>
+      <button class="btn btn-scrape btn-sm px-3" id="btn-scrape" onclick="iniciarScraping()">
+        <i class="bi bi-arrow-clockwise me-1" id="icono-scrape"></i>Actualizar datos
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid py-3 px-4">
+
+  <!-- ── Barra de progreso (oculta por defecto) ─────────────────────────────── -->
+  <div id="barra-progreso" class="card border-0 shadow-sm mb-3 d-none">
+    <div class="card-body py-2">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span class="fw-semibold small"><i class="bi bi-hourglass-split me-1 text-warning"></i>Actualizando datos...</span>
+        <span class="text-danger small" id="txt-num-errores"></span>
+      </div>
+      <div class="progress" style="height:8px">
+        <div class="progress-bar progress-bar-striped progress-bar-animated w-100"></div>
+      </div>
+      <div class="text-muted mt-1" style="font-size:.8rem" id="txt-progreso"></div>
+    </div>
+  </div>
+
+  <!-- ── Tarjetas de estadísticas ───────────────────────────────────────────── -->
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-md-3 col-xl">
+      <div class="card stat-card h-100 p-3">
+        <div class="stat-valor" id="s-activas">—</div>
+        <div class="stat-label">Procesos activos</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3 col-xl">
+      <div class="card stat-card h-100 p-3">
+        <div class="stat-valor text-success" id="s-abiertas">—</div>
+        <div class="stat-label">Inscripción abierta</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3 col-xl">
+      <div class="card stat-card h-100 p-3">
+        <div class="stat-valor text-primary" id="s-proceso">—</div>
+        <div class="stat-label">En proceso</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3 col-xl">
+      <div class="card stat-card h-100 p-3">
+        <div class="stat-valor" id="s-total">—</div>
+        <div class="stat-label">Total fichas</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3 col-xl">
+      <div class="card stat-card h-100 p-3">
+        <div class="stat-valor" id="s-anios">—</div>
+        <div class="stat-label">Años con datos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pestañas principales ───────────────────────────────────────────────── -->
+  <ul class="nav nav-tabs mb-3" id="pestanas">
+    <li class="nav-item"><button class="nav-link active" data-tab="activos"    onclick="cambiarPestana('activos',this)"><i class="bi bi-circle-fill text-success me-1" style="font-size:.6rem"></i>Procesos abiertos</button></li>
+    <li class="nav-item"><button class="nav-link"        data-tab="anuales"    onclick="cambiarPestana('anuales',this)"><i class="bi bi-calendar3 me-1"></i>Por años</button></li>
+    <li class="nav-item"><button class="nav-link"        data-tab="frecuencia" onclick="cambiarPestana('frecuencia',this)"><i class="bi bi-bar-chart me-1"></i>Frecuencia</button></li>
+    <li class="nav-item"><button class="nav-link"        data-tab="todas"      onclick="cambiarPestana('todas',this)"><i class="bi bi-search me-1"></i>Todas las fichas</button></li>
+    <li class="nav-item ms-auto"><button class="nav-link text-danger"          data-tab="log"         onclick="cambiarPestana('log',this)"><i class="bi bi-terminal me-1"></i>Log</button></li>
+  </ul>
+
+  <!-- ── Pestaña: Procesos abiertos ─────────────────────────────────────────── -->
+  <div id="tab-activos">
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body py-2">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-4">
+            <input type="text" class="form-control form-control-sm" id="f-activos-busqueda"
+                   placeholder="🔍 Buscar..." oninput="renderActivos()">
+          </div>
+          <div class="col-6 col-md-2">
+            <select class="form-select form-select-sm" id="f-activos-grupo" onchange="renderActivos()">
+              <option value="">Grupo (todos)</option>
+              <option>A1</option><option>A2</option><option>B</option>
+              <option>C1</option><option>C2</option><option>E</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-3">
+            <select class="form-select form-select-sm" id="f-activos-estado" onchange="renderActivos()">
+              <option value="">Estado (todos)</option>
+              <option value="inscripcion_abierta">Inscripción abierta</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="inscripcion_cerrada">Inscripción cerrada</option>
+              <option value="pendiente_inscripcion">Pendiente inscripción</option>
+              <option value="bases_publicadas">Bases publicadas</option>
+              <option value="resuelto">Resuelto</option>
+              <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3 text-muted small" id="cnt-activos"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive" id="tabla-activos">
+        <div class="empty-state"><i class="bi bi-clipboard"></i><p>Haz clic en "Actualizar datos" para cargar los procesos.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pestaña: Por años ───────────────────────────────────────────────────── -->
+  <div id="tab-anuales" class="d-none">
+    <div class="d-flex gap-2 flex-wrap mb-3" id="tabs-anio"></div>
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body py-2">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-5">
+            <input type="text" class="form-control form-control-sm" id="f-anuales-busqueda"
+                   placeholder="🔍 Buscar..." oninput="renderAnuales()">
+          </div>
+          <div class="col-6 col-md-2">
+            <select class="form-select form-select-sm" id="f-anuales-grupo" onchange="renderAnuales()">
+              <option value="">Grupo (todos)</option>
+              <option>A1</option><option>A2</option><option>B</option>
+              <option>C1</option><option>C2</option><option>E</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3 text-muted small" id="cnt-anuales"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive" id="tabla-anuales">
+        <div class="empty-state"><i class="bi bi-calendar3"></i><p>Selecciona un año o actualiza los datos.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pestaña: Frecuencia ────────────────────────────────────────────────── -->
+  <div id="tab-frecuencia" class="d-none">
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h6 class="text-muted text-uppercase small mb-3">Plazas por grupo (histórico)</h6>
+            <div id="chart-grupo"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h6 class="text-muted text-uppercase small mb-3">Convocatorias por año</h6>
+            <div id="chart-anio"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body py-2">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-5">
+            <input type="text" class="form-control form-control-sm" id="f-freq-busqueda"
+                   placeholder="🔍 Filtrar puesto..." oninput="renderFrecuencia()">
+          </div>
+          <div class="col text-muted small" id="cnt-frecuencia"></div>
+        </div>
+      </div>
+    </div>
+    <div id="lista-frecuencia" class="row g-2"></div>
+  </div>
+
+  <!-- ── Pestaña: Todas las fichas ──────────────────────────────────────────── -->
+  <div id="tab-todas" class="d-none">
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body py-2">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-4">
+            <input type="text" class="form-control form-control-sm" id="f-todas-busqueda"
+                   placeholder="🔍 Buscar..." oninput="renderTodas()">
+          </div>
+          <div class="col-4 col-md-2">
+            <select class="form-select form-select-sm" id="f-todas-anio" onchange="renderTodas()">
+              <option value="">Año (todos)</option>
+            </select>
+          </div>
+          <div class="col-4 col-md-2">
+            <select class="form-select form-select-sm" id="f-todas-grupo" onchange="renderTodas()">
+              <option value="">Grupo (todos)</option>
+              <option>A1</option><option>A2</option><option>B</option>
+              <option>C1</option><option>C2</option><option>E</option>
+            </select>
+          </div>
+          <div class="col text-muted small" id="cnt-todas"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive" id="tabla-todas">
+        <div class="empty-state"><i class="bi bi-search"></i><p>Actualiza los datos primero.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pestaña: Log ───────────────────────────────────────────────────────── -->
+  <div id="tab-log" class="d-none">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-dark text-white small py-2">
+            <i class="bi bi-activity me-1"></i>Estado actual
+          </div>
+          <div class="card-body" id="panel-estado-actual" style="font-size:.85rem"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-dark text-white small py-2 d-flex justify-content-between">
+            <span><i class="bi bi-clock-history me-1"></i>Historial de scrapings</span>
+            <button class="btn btn-sm btn-outline-light py-0" onclick="cargarHistorial()">⟳</button>
+          </div>
+          <div class="card-body p-0" id="panel-historial" style="max-height:400px; overflow-y:auto"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-dark text-white small py-2">
+            <i class="bi bi-clock me-1"></i>Scraping automático (scheduler)
+          </div>
+          <div class="card-body" id="panel-scheduler" style="font-size:.85rem">
+            <div class="text-muted small">Cargando...</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-dark text-white small py-2">
+            <i class="bi bi-exclamation-triangle me-1 text-warning"></i>Errores del último scraping
+          </div>
+          <div class="card-body p-2" id="panel-log" style="max-height:300px; overflow-y:auto">
+            <div class="text-muted small">Sin errores registrados.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ── Offcanvas: Detalle de oferta ──────────────────────────────────────────── -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas-detalle">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="detalle-titulo">—</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body" id="detalle-cuerpo">
+    <div class="empty-state"><i class="bi bi-hourglass"></i><p>Cargando...</p></div>
+  </div>
+</div>
+
+<!-- ── Toast de notificaciones ───────────────────────────────────────────────── -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="toast-notif" class="toast align-items-center border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-msg"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// Estado de la aplicación
+// ══════════════════════════════════════════════════════════════════════════════
+const estado = {
+  activos:      [],
+  anuales:      [],
+  frecuencia:   [],
+  todas:        [],
+  anioSelec:    null,
+  versionScrape: -1,
+  intervaloPolling: null,
+};
+
+// Mapa de estados → clases Bootstrap y texto
+const ESTADOS = {
+  inscripcion_abierta:   ["success", "Inscripción abierta"],
+  en_proceso:            ["primary", "En proceso"],
+  inscripcion_cerrada:   ["warning", "Inscripción cerrada"],
+  pendiente_inscripcion: ["warning text-dark", "Pendiente inscripción"],
+  bases_publicadas:      ["info text-dark",    "Bases publicadas"],
+  resuelto:              ["secondary",          "Resuelto"],
+  pendiente:             ["light text-dark",    "Pendiente"],
+};
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Inicialización
+// ══════════════════════════════════════════════════════════════════════════════
+async function init() {
+  await cargarEstado();
+  await cargarActivos();
+  iniciarPolling();
+}
+
+function iniciarPolling() {
+  estado.intervaloPolling = setInterval(cargarEstado, 3000);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Estado y scraping
+// ══════════════════════════════════════════════════════════════════════════════
+async function cargarEstado() {
+  const datos = await api("/api/estado");
+  if (!datos) return;
+
+  const s = datos.datos;
+
+  // Actualizar estadísticas
+  const st = s.stats || {};
+  set("s-activas",  st.activas ?? "—");
+  set("s-abiertas", (st.por_estado || {})["inscripcion_abierta"] ?? "0");
+  set("s-proceso",  (st.por_estado || {})["en_proceso"] ?? "0");
+  set("s-total",    st.total_ofertas ?? "—");
+  set("s-anios",    Object.keys(st.por_anio || {}).length || "—");
+
+  // Actualizar barra de progreso
+  const barra = document.getElementById("barra-progreso");
+  const btn   = document.getElementById("btn-scrape");
+  if (s.en_curso) {
+    barra.classList.remove("d-none");
+    btn.disabled = true;
+    document.getElementById("icono-scrape").className = "bi bi-hourglass-split me-1";
+    set("txt-progreso",    s.progreso || "");
+    const numErr = (s.ultimo_log?.errores || []).length;
+    set("txt-num-errores", numErr ? `${numErr} error(es)` : "");
+  } else {
+    barra.classList.add("d-none");
+    btn.disabled = false;
+    document.getElementById("icono-scrape").className = "bi bi-arrow-clockwise me-1";
+  }
+
+  // Fecha del último scrape
+  if (s.ultimo_log?.finalizado_en) {
+    const fecha = new Date(s.ultimo_log.finalizado_en).toLocaleString("es-ES", {
+      dateStyle: "short", timeStyle: "short"
+    });
+    set("txt-ultimo-scrape", `Última actualización: ${fecha}`);
+  }
+
+  // Detectar que terminó un scrape nuevo
+  const versionServidor = s.version ?? 0;
+  if (!s.en_curso && versionServidor > estado.versionScrape) {
+    estado.versionScrape = versionServidor;
+    if (versionServidor > 0) {
+      await cargarActivos();
+      const n = s.ultimo_log?.ofertas_guardadas ?? 0;
+      toast(n > 0 ? `✅ ${n} procesos cargados` : "✅ Datos actualizados", "success");
+    }
+  }
+
+  // Actualizar panel de log si está visible
+  if (!document.getElementById("tab-log").classList.contains("d-none")) {
+    renderEstadoActual(s);
+    renderErroresLog(s.ultimo_log?.errores || []);
+  }
+}
+
+async function iniciarScraping() {
+  document.getElementById("btn-scrape").disabled = true;
+  const res = await api("/api/scraping/iniciar", "POST");
+  if (!res) return;
+  if (!res.ok) {
+    toast("⚠️ " + res.error, "danger");
+    document.getElementById("btn-scrape").disabled = false;
+  } else {
+    toast("🔄 Scraping iniciado...", "info");
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Carga de datos
+// ══════════════════════════════════════════════════════════════════════════════
+async function cargarActivos() {
+  const res = await api("/api/activas");
+  if (res?.ok) { estado.activos = res.datos; renderActivos(); }
+}
+
+async function cargarAnuales(anio) {
+  const res = await api(`/api/anuales?anio=${anio}`);
+  if (res?.ok) { estado.anuales = res.datos; renderAnuales(); }
+}
+
+async function cargarFrecuencia() {
+  const [resFrec, resStats] = await Promise.all([
+    api("/api/frecuencia"),
+    api("/api/estadisticas")
+  ]);
+  if (resFrec?.ok) { estado.frecuencia = resFrec.datos; renderFrecuencia(); }
+  if (resStats?.ok) renderGraficos(resStats.datos);
+}
+
+async function cargarTodas() {
+  const res = await api("/api/ofertas");
+  if (!res?.ok) return;
+  estado.todas = res.datos;
+  // Poblar el filtro de año
+  const anios = [...new Set(estado.todas.map(o => o.anio).filter(Boolean))].sort((a,b)=>b-a);
+  const sel   = document.getElementById("f-todas-anio");
+  sel.innerHTML = '<option value="">Año (todos)</option>' +
+                  anios.map(a => `<option>${a}</option>`).join("");
+  renderTodas();
+}
+
+async function cargarHistorial() {
+  const res = await api("/api/scraping/historial");
+  if (!res?.ok) return;
+  const el = document.getElementById("panel-historial");
+  if (!res.datos.length) { el.innerHTML = '<div class="p-3 text-muted small">Sin historial</div>'; return; }
+  el.innerHTML = res.datos.map(log => `
+    <div class="p-2 border-bottom small">
+      <span class="badge bg-${log.estado === 'completado' ? 'success' : log.estado === 'en_curso' ? 'warning text-dark' : 'danger'} me-1">${log.estado}</span>
+      ${formatFecha(log.iniciado_en)} —
+      <strong>${log.ofertas_guardadas}</strong> ofertas
+      ${log.errores.length ? `<span class="text-danger ms-1">(${log.errores.length} errores)</span>` : ""}
+    </div>`).join("");
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Navegación por pestañas
+// ══════════════════════════════════════════════════════════════════════════════
+async function cambiarPestana(nombre, btn) {
+  document.querySelectorAll('[id^="tab-"]').forEach(t => t.classList.add("d-none"));
+  document.getElementById("tab-" + nombre).classList.remove("d-none");
+  document.querySelectorAll(".nav-link").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  if (nombre === "anuales"    && !estado.anioSelec)       await iniciarPestanaAnuales();
+  if (nombre === "frecuencia" && !estado.frecuencia.length) await cargarFrecuencia();
+  if (nombre === "todas"      && !estado.todas.length)    await cargarTodas();
+  if (nombre === "log") { renderEstadoActual(null); await cargarHistorial(); await cargarInfoScheduler(); }
+}
+
+async function iniciarPestanaAnuales() {
+  const res = await api("/api/anios");
+  if (!res?.ok || !res.datos.length) return;
+  const anios = res.datos;
+  const cont  = document.getElementById("tabs-anio");
+  cont.innerHTML = anios.map(a =>
+    `<button class="btn btn-sm btn-outline-secondary anio-tab" onclick="seleccionarAnio(${a},this)">${a}</button>`
+  ).join("");
+  await seleccionarAnio(anios[0], cont.querySelector(".anio-tab"));
+}
+
+async function seleccionarAnio(anio, btn) {
+  estado.anioSelec = anio;
+  document.querySelectorAll(".anio-tab").forEach(t => t.classList.remove("activo"));
+  btn.classList.add("activo");
+  await cargarAnuales(anio);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Renderizado de tablas
+// ══════════════════════════════════════════════════════════════════════════════
+function renderActivos() {
+  const busq  = v("f-activos-busqueda").toLowerCase();
+  const grupo = v("f-activos-grupo");
+  const est   = v("f-activos-estado");
+
+  let datos = estado.activos;
+  if (busq)  datos = datos.filter(o => o.nombre?.toLowerCase().includes(busq));
+  if (grupo) datos = datos.filter(o => o.grupo === grupo);
+  if (est)   datos = datos.filter(o => o.estado === est);
+
+  set("cnt-activos", `${datos.length} resultado${datos.length !== 1 ? "s" : ""}`);
+  renderTabla("tabla-activos", datos, columnaActivos, "Sin procesos activos.");
+}
+
+function renderAnuales() {
+  const busq  = v("f-anuales-busqueda").toLowerCase();
+  const grupo = v("f-anuales-grupo");
+
+  let datos = estado.anuales;
+  if (busq)  datos = datos.filter(o => o.nombre?.toLowerCase().includes(busq));
+  if (grupo) datos = datos.filter(o => o.grupo === grupo);
+
+  set("cnt-anuales", `${datos.length} entrada${datos.length !== 1 ? "s" : ""}`);
+  renderTabla("tabla-anuales", datos, columnaAnuales, "Sin datos para este año.");
+}
+
+function renderTodas() {
+  const busq  = v("f-todas-busqueda").toLowerCase();
+  const anio  = v("f-todas-anio");
+  const grupo = v("f-todas-grupo");
+
+  let datos = estado.todas;
+  if (busq)  datos = datos.filter(o => o.nombre?.toLowerCase().includes(busq));
+  if (anio)  datos = datos.filter(o => String(o.anio) === anio);
+  if (grupo) datos = datos.filter(o => o.grupo === grupo);
+
+  set("cnt-todas", `${datos.length} ficha${datos.length !== 1 ? "s" : ""}`);
+  renderTabla("tabla-todas", datos.slice(0, 500), columnasTodas, "Sin fichas disponibles.");
+}
+
+function renderFrecuencia() {
+  const busq = v("f-freq-busqueda").toLowerCase();
+  let datos  = estado.frecuencia;
+  if (busq) datos = datos.filter(f => f.nombre?.toLowerCase().includes(busq));
+  set("cnt-frecuencia", `${datos.length} puesto${datos.length !== 1 ? "s" : ""}`);
+
+  const max  = datos.length ? datos[0].num_convocatorias : 1;
+  const cont = document.getElementById("lista-frecuencia");
+
+  if (!datos.length) {
+    cont.innerHTML = '<div class="col-12"><div class="empty-state"><i class="bi bi-bar-chart"></i><p>Sin datos.</p></div></div>';
+    return;
+  }
+
+  cont.innerHTML = datos.slice(0, 200).map((f, i) => `
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card freq-card p-3 h-100">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="flex-grow-1 me-2">
+            <div class="fw-semibold mb-1" style="font-size:.9rem">${esc(f.nombre)}</div>
+            <div class="d-flex flex-wrap gap-1 mb-2">
+              ${(f.grupos || []).map(g => `<span class="badge" style="background:var(--zgz-azul)">${esc(g)}</span>`).join("")}
+              <span class="badge bg-info text-dark">${f.total_plazas} plazas</span>
+            </div>
+            <div class="freq-barra" style="width:${Math.round(f.num_convocatorias/max*100)}%"></div>
+            <div class="text-muted mt-1" style="font-size:.75rem">Años: ${(f.anios || []).join(", ")}</div>
+          </div>
+          <div class="text-center">
+            <div style="font-size:1.6rem; font-weight:800; color:var(--zgz-azul); line-height:1">${f.num_convocatorias}</div>
+            <div class="text-muted" style="font-size:.7rem">convoc.</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Tabla genérica
+// ══════════════════════════════════════════════════════════════════════════════
+function renderTabla(idContenedor, datos, fnColumnas, mensajeVacio) {
+  const cont = document.getElementById(idContenedor);
+  if (!datos.length) {
+    cont.innerHTML = `<div class="empty-state"><i class="bi bi-search"></i><p>${mensajeVacio}</p></div>`;
+    return;
+  }
+  const { cabecera, filas } = fnColumnas(datos);
+  cont.innerHTML = `
+    <table class="table table-hover table-bordered mb-0">
+      <thead><tr>${cabecera}</tr></thead>
+      <tbody>${filas}</tbody>
+    </table>`;
+}
+
+function columnaActivos(datos) {
+  const cabecera = `
+    <th class="sortable" onclick="ordenar('activos','nombre',this)">Denominación</th>
+    <th>Grupo</th><th>Año</th><th>Plazas</th><th>Estado</th><th>Plazo instancias</th>`;
+  const filas = datos.map(o => `
+    <tr class="fila-clickable" onclick="abrirDetalle('${o.oferta_id}')">
+      <td><span class="fw-500">${esc(o.nombre)}</span></td>
+      <td><span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo||"—")}</span></td>
+      <td>${o.anio || "—"}</td>
+      <td class="small">${esc(formatPlazas(o.plazas))}</td>
+      <td>${badgeEstado(o.estado)}</td>
+      <td class="text-muted small">${esc(o.fecha_instancia || "—")}</td>
+    </tr>`).join("");
+  return { cabecera, filas };
+}
+
+function columnaAnuales(datos) {
+  const cabecera = `<th>Denominación</th><th>Plazas</th><th>Grupo</th><th>Procedimiento</th><th>Titulación</th>`;
+  const filas = datos.map(o => `
+    <tr class="${o.oferta_id ? "fila-clickable" : ""}" ${o.oferta_id ? `onclick="abrirDetalle('${o.oferta_id}')"` : ""}>
+      <td class="fw-500">${esc(o.nombre)}</td>
+      <td>${esc(o.plazas || "—")}</td>
+      <td><span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo||"—")}</span></td>
+      <td class="small">${esc(o.procedimiento || "—")}</td>
+      <td class="small text-truncate" style="max-width:200px">${esc(o.titulacion || "—")}</td>
+    </tr>`).join("");
+  return { cabecera, filas };
+}
+
+function columnasTodas(datos) {
+  const cabecera = `<th>Denominación</th><th>Año</th><th>Grupo</th><th>Plazas</th><th>Estado</th><th>Tipo</th>`;
+  const filas = datos.map(o => `
+    <tr class="fila-clickable" onclick="abrirDetalle('${o.oferta_id}')">
+      <td>${esc(o.nombre)}</td>
+      <td>${o.anio || "—"}</td>
+      <td><span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo||"—")}</span></td>
+      <td class="small">${esc(formatPlazas(o.plazas))}</td>
+      <td>${badgeEstado(o.estado)}</td>
+      <td class="small">${esc(o.tipo_examen || "—")}</td>
+    </tr>`).join("");
+  return { cabecera, filas };
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Detalle de oferta (Offcanvas)
+// ══════════════════════════════════════════════════════════════════════════════
+async function abrirDetalle(ofertaId) {
+  set("detalle-titulo", "Cargando...");
+  set("detalle-cuerpo", `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`);
+  new bootstrap.Offcanvas(document.getElementById("offcanvas-detalle")).show();
+
+  const res = await api(`/api/ofertas/${ofertaId}`);
+  if (!res?.ok) {
+    set("detalle-cuerpo", `<div class="alert alert-danger">Error: ${esc(res?.error || "desconocido")}</div>`);
+    return;
+  }
+
+  const o       = res.datos;
+  const anuncios = o.anuncios || [];
+
+  set("detalle-titulo", o.nombre || "—");
+  set("detalle-cuerpo", `
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <a href="${o.url || `https://www.zaragoza.es/oferta/ofertaDetalle.jsp?id=${o.oferta_id}`}"
+         target="_blank" class="btn btn-sm btn-primary">
+        <i class="bi bi-box-arrow-up-right me-1"></i>Ver en zaragoza.es
+      </a>
+      ${o.bases_url ? `<a href="${o.bases_url}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-text me-1"></i>Bases convocatoria</a>` : ""}
+      <button class="btn btn-sm btn-outline-secondary" onclick="actualizarOferta('${o.oferta_id}')">
+        <i class="bi bi-arrow-clockwise me-1"></i>Actualizar
+      </button>
+      <button class="btn btn-sm btn-outline-success" onclick="leerPDF('${o.oferta_id}')" id="btn-pdf-${o.oferta_id}">
+        <i class="bi bi-file-earmark-pdf me-1"></i>Leer bases PDF
+      </button>
+    </div>
+    <div id="pdf-resultado-${o.oferta_id}" class="mb-3"></div>
+    <div class="mb-3">${badgeEstado(o.estado)}</div>
+    <div class="row g-3 mb-3">
+      ${campo("Año oferta",        o.anio)}
+      ${campo("Grupo",             o.grupo ? `<span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo)}</span>` : "—", true)}
+      ${campo("Total plazas",      o.plazas)}
+      ${campo("Tipo examen",       o.tipo_examen)}
+      ${campo("Turno",             o.turno)}
+      ${campo("Fecha límite inst.", o.fecha_instancia)}
+      ${campo("Titulación exigida", o.titulacion, false, true)}
+      ${campo("Escala / Cuerpo",    o.escala,     false, true)}
+      ${o.convocatoria_bop ? campo("BOPZ", o.convocatoria_bop) : ""}
+      ${o.convocatoria_boe ? campo("BOE",  o.convocatoria_boe) : ""}
+      ${o.expediente       ? campo("Expediente", o.expediente) : ""}
+    </div>
+    ${o.observaciones ? `
+      <div class="mb-3">
+        <div class="campo-label mb-1">Observaciones</div>
+        <div class="bg-light rounded p-2 small">${esc(o.observaciones)}</div>
+      </div>` : ""}
+    <div>
+      <div class="campo-label mb-2">📢 Anuncios <span class="badge bg-secondary">${anuncios.length}</span></div>
+      ${anuncios.length
+        ? anuncios.map(a => `
+            <div class="d-flex gap-2 py-2 border-bottom">
+              <div class="anuncio-fecha">${esc(a.fecha || "")}</div>
+              <div class="anuncio-texto">
+                ${a.url
+                  ? `<a href="${a.url}" target="_blank" rel="noopener">${esc(a.texto)}</a>`
+                  : esc(a.texto)}
+              </div>
+            </div>`).join("")
+        : '<div class="text-muted small fst-italic">Sin anuncios publicados aún.</div>'}
+    </div>`);
+}
+
+async function actualizarOferta(ofertaId) {
+  toast("Actualizando ficha...", "info");
+  const res = await api(`/api/ofertas/${ofertaId}/actualizar`, "POST");
+  if (res?.ok) { await abrirDetalle(ofertaId); toast("✅ Ficha actualizada", "success"); }
+  else toast("Error al actualizar: " + (res?.error || "?"), "danger");
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Gráficos de barras (Bootstrap progress bars)
+// ══════════════════════════════════════════════════════════════════════════════
+function renderGraficos(stats) {
+  const grupos = Object.entries(stats.por_grupo || {}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxG   = grupos.length ? grupos[0][1] : 1;
+  document.getElementById("chart-grupo").innerHTML = grupos.map(([g, n]) => `
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <div style="width:50px; text-align:right; font-size:.8rem">${esc(g)}</div>
+      <div class="flex-grow-1 bg-light rounded" style="height:22px">
+        <div class="h-100 d-flex align-items-center rounded"
+             style="width:${Math.round(n/maxG*100)}%; background:var(--zgz-azul); min-width:30px">
+          <span class="text-white ps-2" style="font-size:.75rem; font-weight:700">${n}</span>
+        </div>
+      </div>
+    </div>`).join("");
+
+  const anios = Object.entries(stats.por_anio || {}).sort((a,b)=>b[0]-a[0]).slice(0,10);
+  const maxA  = anios.length ? Math.max(...anios.map(([,n])=>n)) : 1;
+  document.getElementById("chart-anio").innerHTML = anios.map(([a, n]) => `
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <div style="width:40px; text-align:right; font-size:.8rem">${a}</div>
+      <div class="flex-grow-1 bg-light rounded" style="height:22px">
+        <div class="h-100 d-flex align-items-center rounded"
+             style="width:${Math.round(n/maxA*100)}%; background:var(--zgz-oro); min-width:30px">
+          <span class="ps-2" style="font-size:.75rem; font-weight:700">${n}</span>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Panel de log
+// ══════════════════════════════════════════════════════════════════════════════
+function renderEstadoActual(s) {
+  if (!s) return;
+  const el = document.getElementById("panel-estado-actual");
+  const ult = s.ultimo_log;
+  el.innerHTML = `
+    <table class="table table-sm table-borderless mb-0" style="font-size:.85rem">
+      <tr><td class="text-muted">Estado</td><td>${s.en_curso ? '<span class="badge bg-warning text-dark">En curso</span>' : '<span class="badge bg-success">Inactivo</span>'}</td></tr>
+      <tr><td class="text-muted">Progreso</td><td>${esc(s.progreso || "—")}</td></tr>
+      <tr><td class="text-muted">Versión</td><td>${s.version ?? "—"}</td></tr>
+      ${ult ? `
+      <tr><td class="text-muted">Último inicio</td><td>${formatFecha(ult.iniciado_en)}</td></tr>
+      <tr><td class="text-muted">Último fin</td><td>${formatFecha(ult.finalizado_en)}</td></tr>
+      <tr><td class="text-muted">Guardadas</td><td>${ult.ofertas_guardadas}</td></tr>
+      <tr><td class="text-muted">Errores</td><td class="${ult.errores.length ? 'text-danger fw-semibold' : ''}">${ult.errores.length}</td></tr>
+      ` : ""}
+    </table>`;
+}
+
+function renderErroresLog(errores) {
+  const el = document.getElementById("panel-log");
+  if (!errores.length) {
+    el.innerHTML = '<div class="text-muted small p-2">Sin errores en el último scraping.</div>';
+    return;
+  }
+  el.innerHTML = errores.map(e => `
+    <div class="log-entry log-error">
+      <i class="bi bi-exclamation-circle me-1"></i>${esc(e)}
+    </div>`).join("");
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Ordenación de tablas
+// ══════════════════════════════════════════════════════════════════════════════
+const _ordenDir = {};
+function ordenar(coleccion, campo, th) {
+  const asc = !_ordenDir[coleccion + campo];
+  _ordenDir[coleccion + campo] = asc;
+  estado[coleccion].sort((a, b) => {
+    const va = a[campo] ?? ""; const vb = b[campo] ?? "";
+    if (typeof va === "number") return asc ? va - vb : vb - va;
+    return asc ? String(va).localeCompare(String(vb), "es") : String(vb).localeCompare(String(va), "es");
+  });
+  if (coleccion === "activos") renderActivos();
+  else renderTodas();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Utilidades
+// ══════════════════════════════════════════════════════════════════════════════
+async function api(url, metodo = "GET") {
+  try {
+    const r = await fetch(url, { method: metodo });
+    return r.json();
+  } catch (e) {
+    console.error("Error de red:", url, e);
+    return null;
+  }
+}
+
+function badgeEstado(estado) {
+  const [cls, label] = ESTADOS[estado] || ["light text-dark", estado || "—"];
+  return `<span class="badge bg-${cls} badge-estado">${label}</span>`;
+}
+
+function campo(label, valor, html = false, full = false) {
+  const contenido = html ? (valor || "—") : esc(valor != null ? String(valor) : "—");
+  return `
+    <div class="col-${full ? "12" : "6"}">
+      <div class="campo-label">${label}</div>
+      <div class="campo-valor">${contenido}</div>
+    </div>`;
+}
+
+function formatPlazas(plazas) {
+  if (!plazas) return "—";
+  const m = plazas.match(/Total:\s*(\d+)/i);
+  if (m) return m[1] + " (total)";
+  return plazas.split("\n")[0].trim().slice(0, 50);
+}
+
+function formatFecha(iso) {
+  if (!iso) return "—";
+  try { return new Date(iso).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" }); }
+  catch { return iso; }
+}
+
+function esc(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function set(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+function v(id) { return document.getElementById(id)?.value || ""; }
+
+function toast(msg, tipo = "secondary") {
+  const el = document.getElementById("toast-notif");
+  el.className = `toast align-items-center text-bg-${tipo} border-0`;
+  set("toast-msg", msg);
+  bootstrap.Toast.getOrCreateInstance(el, { delay: 4000 }).show();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Lectura de PDF de bases
+// ══════════════════════════════════════════════════════════════════════════════
+async function leerPDF(ofertaId) {
+  const btn = document.getElementById(`btn-pdf-${ofertaId}`);
+  const res_div = document.getElementById(`pdf-resultado-${ofertaId}`);
+  if (!btn || !res_div) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Leyendo PDF...';
+  res_div.innerHTML = '';
+
+  const res = await api(`/api/ofertas/${ofertaId}/pdf`);
+  btn.disabled = false;
+  btn.innerHTML = '<i class="bi bi-file-earmark-pdf me-1"></i>Leer bases PDF';
+
+  if (!res?.ok) {
+    res_div.innerHTML = `<div class="alert alert-warning small py-2">${esc(res?.error || 'No se pudo leer el PDF')}</div>`;
+    return;
+  }
+
+  const c = res.datos.contenido;
+  if (!c) { res_div.innerHTML = '<div class="alert alert-warning small py-2">Sin contenido extraíble</div>'; return; }
+
+  if (c.advertencia) {
+    res_div.innerHTML = `<div class="alert alert-warning small py-2"><i class="bi bi-exclamation-triangle me-1"></i>${esc(c.advertencia)}</div>`;
+    return;
+  }
+
+  let html = `<div class="card border-success mt-2"><div class="card-header bg-success text-white small py-1">
+    <i class="bi bi-file-earmark-pdf me-1"></i>Bases de convocatoria — ${c.paginas} páginas
+    <a href="${res.datos.url_pdf}" target="_blank" class="float-end text-white small">Descargar PDF <i class="bi bi-download"></i></a>
+  </div><div class="card-body p-2">`;
+
+  // Temario
+  if (c.temario?.length) {
+    html += `<div class="mb-3">
+      <div class="fw-semibold small mb-1"><i class="bi bi-list-ol me-1"></i>Temario (${c.temario.length} temas)</div>
+      <div style="max-height:200px;overflow-y:auto;font-size:.78rem">
+        ${c.temario.map(t => `<div class="py-1 border-bottom"><span class="badge bg-secondary me-1">${t.numero}</span>${esc(t.texto)}</div>`).join('')}
+      </div></div>`;
+  }
+
+  // Puntuación
+  if (c.puntuacion) {
+    html += `<div class="mb-3">
+      <div class="fw-semibold small mb-1"><i class="bi bi-calculator me-1"></i>Puntuación / Baremo</div>
+      <div class="bg-light rounded p-2" style="font-size:.78rem">${esc(c.puntuacion)}</div>
+    </div>`;
+  }
+
+  // Requisitos
+  if (c.requisitos) {
+    html += `<div class="mb-3">
+      <div class="fw-semibold small mb-1"><i class="bi bi-person-check me-1"></i>Requisitos de participación</div>
+      <div class="bg-light rounded p-2" style="font-size:.78rem">${esc(c.requisitos)}</div>
+    </div>`;
+  }
+
+  // Fechas
+  if (c.fechas?.length) {
+    html += `<div>
+      <div class="fw-semibold small mb-1"><i class="bi bi-calendar-event me-1"></i>Fechas mencionadas en el documento</div>
+      <div class="d-flex flex-wrap gap-1">
+        ${c.fechas.map(f => `<span class="badge bg-info text-dark">${esc(f)}</span>`).join('')}
+      </div></div>`;
+  }
+
+  html += '</div></div>';
+  res_div.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Info del scheduler
+// ══════════════════════════════════════════════════════════════════════════════
+async function cargarInfoScheduler() {
+  const res = await api("/api/scheduler");
+  const el  = document.getElementById("panel-scheduler");
+  if (!el || !res?.ok) return;
+
+  const s = res.datos;
+  if (!s.activo) {
+    el.innerHTML = '<div class="text-muted small">Scheduler desactivado.</div>';
+    return;
+  }
+
+  const dias = { mon:"Lunes", tue:"Martes", wed:"Miércoles", thu:"Jueves", fri:"Viernes", sat:"Sábado", sun:"Domingo" };
+  const proxima = s.proxima_ejecucion
+    ? new Date(s.proxima_ejecucion).toLocaleString("es-ES", {dateStyle:"full", timeStyle:"short"})
+    : "—";
+
+  el.innerHTML = `
+    <table class="table table-sm table-borderless mb-0" style="font-size:.85rem">
+      <tr><td class="text-muted">Estado</td><td><span class="badge bg-success">Activo</span></td></tr>
+      <tr><td class="text-muted">Frecuencia</td><td>Cada ${dias[s.dia_semana] || s.dia_semana} a las ${s.hora}:00</td></tr>
+      <tr><td class="text-muted">Próxima ejecución</td><td>${proxima}</td></tr>
+    </table>`;
+}
+
+// Cerrar detalle con Escape
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    const oc = bootstrap.Offcanvas.getInstance(document.getElementById("offcanvas-detalle"));
+    if (oc) oc.hide();
+  }
+});
+
+init();
+</script>
+</body>
+</html>
