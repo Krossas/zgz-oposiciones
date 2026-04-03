@@ -203,7 +203,7 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
         datos["bases_url"] = Config.BASE_URL + href if not href.startswith("http") else href
 
     # ── Anuncios ───────────────────────────────────────────────────────────────
-    # Buscar el h3 "Anuncios" y luego todos los elementos que le siguen
+    # Buscar el h3 "Anuncios" y procesar el bloque siguiente (dl/ul/ol o texto libre)
     anuncios = []
     h3_anuncios = None
     for h3 in soup.find_all("h3"):
@@ -211,45 +211,88 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
             h3_anuncios = h3
             break
 
+    def _registrar_anuncio(fecha, texto, url_anuncio=None):
+        if texto:
+            texto = _limpiar_texto(texto)
+            fecha = _limpiar_texto(fecha)
+            if fecha and fecha.endswith(":"):
+                fecha = fecha[:-1].strip()
+            anuncios.append({"fecha": fecha, "texto": texto, "url": url_anuncio or None})
+
     if h3_anuncios:
         elemento = h3_anuncios.find_next_sibling()
         while elemento:
-            texto_completo = _limpiar_texto(elemento.get_text())
-            if not texto_completo:
-                elemento = elemento.find_next_sibling()
-                continue
+            if hasattr(elemento, 'name') and elemento.name == 'dl':
+                for dt in elemento.find_all('dt'):
+                    fecha = None
+                    texto = None
+                    url_anuncio = None
 
-            # Extraemos todos los enlaces dentro de este bloque
-            for enlace in elemento.find_all("a"):
-                texto_anuncio = _limpiar_texto(enlace.get_text())
-                url_anuncio   = enlace.get("href", "")
-                if url_anuncio and not url_anuncio.startswith("http"):
-                    url_anuncio = Config.BASE_URL + url_anuncio
+                    span_fecha = dt.find('span', class_='fecha')
+                    if span_fecha:
+                        fecha = _limpiar_texto(span_fecha.get_text())
 
-                # La fecha suele estar en el texto del contenedor: "29/12/2025: Texto"
-                fecha = None
-                fecha_match = re.search(r"(\d{2}/\d{2}/\d{4})", texto_completo)
-                if fecha_match:
-                    fecha = fecha_match.group(1)
+                    a = dt.find('a')
+                    if a:
+                        texto = _limpiar_texto(a.get_text())
+                        url_anuncio = a.get('href', '')
+                        if url_anuncio and not url_anuncio.startswith('http'):
+                            url_anuncio = Config.BASE_URL + url_anuncio
 
-                if texto_anuncio:
-                    anuncios.append({
-                        "fecha": fecha,
-                        "texto": texto_anuncio,
-                        "url":   url_anuncio or None,
-                    })
+                    if not texto:
+                        raw = _limpiar_texto(dt.get_text())
+                        m = re.match(r"^(\d{2}/\d{2}/\d{4}):\s*(.*)$", raw or "")
+                        if m:
+                            fecha = m.group(1)
+                            texto = m.group(2)
 
-            # Si no tiene enlaces, puede ser un anuncio de texto puro
-            if not elemento.find("a"):
-                fecha_match = re.match(r"^(\d{2}/\d{2}/\d{4}):\s*(.*)", texto_completo)
-                if fecha_match:
-                    anuncios.append({
-                        "fecha": fecha_match.group(1),
-                        "texto": fecha_match.group(2),
-                        "url":   None,
-                    })
+                    if texto:
+                        _registrar_anuncio(fecha or '', texto, url_anuncio)
 
-            elemento = elemento.find_next_sibling()
+            elif hasattr(elemento, 'name') and elemento.name in ('ul', 'ol'):
+                for li in elemento.find_all('li'):
+                    texto_completo = _limpiar_texto(li.get_text())
+                    m = re.match(r"^(\d{2}/\d{2}/\d{4}):\s*(.*)$", texto_completo or "")
+                    if m:
+                        _registrar_anuncio(m.group(1), m.group(2))
+
+            else:
+                # Fallback: intentar extraer del texto completo y de enlaces
+                texto_completo = _limpiar_texto(elemento.get_text() if hasattr(elemento, 'get_text') else '')
+                # Casos listados en la misma línea con enlaces
+                for dt in elemento.find_all('dt') if hasattr(elemento, 'find_all') else []:
+                    # procesar si hay dt en un bloque no estándar
+                    span_fecha = dt.find('span', class_='fecha')
+                    if span_fecha:
+                        fecha = _limpiar_texto(span_fecha.get_text())
+                        a = dt.find('a')
+                        if a:
+                            texto = _limpiar_texto(a.get_text())
+                            url_anuncio = a.get('href', '')
+                            if url_anuncio and not url_anuncio.startswith('http'):
+                                url_anuncio = Config.BASE_URL + url_anuncio
+                            _registrar_anuncio(fecha or '', texto, url_anuncio)
+                if not anuncios:
+                    for a in elemento.find_all('a') if hasattr(elemento, 'find_all') else []:
+                        href = a.get('href', '')
+                        href_full = Config.BASE_URL + href if href and not href.startswith('http') else href
+                        texto = _limpiar_texto(a.get_text())
+                        # fecha puede aparecer en el mismo bloque de texto completo
+                        fecha_match = re.search(r"(\d{2}/\d{2}/\d{4})", texto_completo or "")
+                        _registrar_anuncio(fecha_match.group(1) if fecha_match else '', texto, href_full)
+
+            elemento = elemento.find_next_sibling() if hasattr(elemento, 'find_next_sibling') else None
+
+    # Eliminar duplicados exactos dejando primer valor
+    visto = set()
+    anuncios_unicos = []
+    for a in anuncios:
+        key = (a.get('fecha'), a.get('texto'), a.get('url'))
+        if key not in visto:
+            visto.add(key)
+            anuncios_unicos.append(a)
+
+    datos['anuncios'] = anuncios_unicos
 
     datos["anuncios"] = anuncios
 

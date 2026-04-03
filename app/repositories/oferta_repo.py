@@ -114,14 +114,23 @@ class OfertaRepository:
                 where_extra = "AND " + " AND ".join(condiciones[1:]) if len(condiciones) > 1 else ""
                 params["query"] = query_fts
                 sql = f"""
-                    SELECT o.* FROM oferta o
+                    SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
+                    FROM oferta o
                     INNER JOIN oferta_fts ON oferta_fts.oferta_id = o.oferta_id
+                    LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                      ON a_max.oferta_id = o.oferta_id
                     WHERE oferta_fts MATCH :query AND o.es_activa = 1 {where_extra}
                     ORDER BY rank, o.nombre ASC
                 """
             else:
                 where = "WHERE " + " AND ".join(condiciones)
-                sql   = f"SELECT * FROM oferta {where} ORDER BY nombre ASC"
+                sql   = f"""
+                    SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
+                    FROM oferta o
+                    LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                      ON a_max.oferta_id = o.oferta_id
+                    {where} ORDER BY o.nombre ASC
+                """
 
             filas = conn.execute(sql, params).fetchall()
         return [dict(f) for f in filas]
@@ -186,7 +195,11 @@ class OfertaRepository:
                 else:
                     placeholders = ",".join("?" * len(ids_pagina))
                     filas = conn.execute(
-                        f"SELECT * FROM oferta WHERE id IN ({placeholders}) ORDER BY anio DESC, nombre ASC",
+                        f"""SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
+                           FROM oferta o
+                           LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                             ON a_max.oferta_id = o.oferta_id
+                           WHERE o.id IN ({placeholders}) ORDER BY o.anio DESC, o.nombre ASC""",
                         ids_pagina
                     ).fetchall()
             else:
@@ -197,7 +210,11 @@ class OfertaRepository:
                 params["limite"] = por_pagina
                 params["offset"] = (pagina - 1) * por_pagina
                 filas = conn.execute(
-                    f"SELECT * FROM oferta {where} ORDER BY anio DESC, nombre ASC LIMIT :limite OFFSET :offset",
+                    f"""SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
+                       FROM oferta o
+                       LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                         ON a_max.oferta_id = o.oferta_id
+                       {where} ORDER BY o.anio DESC, o.nombre ASC LIMIT :limite OFFSET :offset""",
                     params
                 ).fetchall()
 
@@ -214,7 +231,11 @@ class OfertaRepository:
         """Devuelve una oferta concreta con todos sus anuncios."""
         with obtener_conexion() as conn:
             oferta = conn.execute(
-                "SELECT * FROM oferta WHERE oferta_id = ?", (oferta_id,)
+                """SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
+                   FROM oferta o
+                   LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                     ON a_max.oferta_id = o.oferta_id
+                   WHERE o.oferta_id = ?""", (oferta_id,)
             ).fetchone()
 
             if not oferta:

@@ -648,7 +648,10 @@ function renderTabla(idContenedor, datos, fnColumnas, mensajeVacio) {
 function columnaActivos(datos) {
   const cabecera = `
     <th class="sortable" onclick="ordenar('activos','nombre',this)">Denominación</th>
-    <th>Grupo</th><th>Año</th><th>Plazas</th><th>Estado</th><th>Plazo instancias</th>`;
+    <th>Grupo</th><th class="sortable" onclick="ordenar('activos','anio',this)">Año</th>
+    <th>Plazas</th><th>Estado</th>
+    <th class="sortable" onclick="ordenar('activos','fecha_instancia',this)">Plazo instancias</th>
+    <th class="sortable" onclick="ordenar('activos','ultima_actualizacion',this)">Última actualización</th>`;
   const filas = datos.map(o => `
     <tr class="fila-clickable" onclick="abrirDetalle('${o.oferta_id}')">
       <td><span class="fw-500">${esc(o.nombre)}</span></td>
@@ -657,6 +660,7 @@ function columnaActivos(datos) {
       <td class="small">${esc(formatPlazas(o.plazas))}</td>
       <td>${badgeEstado(o.estado)}</td>
       <td class="text-muted small">${esc(o.fecha_instancia || "—")}</td>
+      <td class="text-muted small">${esc(o.ultima_actualizacion || "—")}</td>
     </tr>`).join("");
   return { cabecera, filas };
 }
@@ -675,7 +679,7 @@ function columnaAnuales(datos) {
 }
 
 function columnasTodas(datos) {
-  const cabecera = `<th>Denominación</th><th>Año</th><th>Grupo</th><th>Plazas</th><th>Estado</th><th>Tipo</th>`;
+  const cabecera = `<th>Denominación</th><th class="sortable" onclick="ordenar('todas','anio',this)">Año</th><th>Grupo</th><th>Plazas</th><th>Estado</th><th>Tipo</th><th class="sortable" onclick="ordenar('todas','ultima_actualizacion',this)">Última actualización</th>`;
   const filas = datos.map(o => `
     <tr class="fila-clickable" onclick="abrirDetalle('${o.oferta_id}')">
       <td>${esc(o.nombre)}</td>
@@ -684,6 +688,7 @@ function columnasTodas(datos) {
       <td class="small">${esc(formatPlazas(o.plazas))}</td>
       <td>${badgeEstado(o.estado)}</td>
       <td class="small">${esc(o.tipo_examen || "—")}</td>
+      <td class="text-muted small">${esc(o.ultima_actualizacion || "—")}</td>
     </tr>`).join("");
   return { cabecera, filas };
 }
@@ -712,15 +717,13 @@ async function abrirDetalle(ofertaId) {
          target="_blank" class="btn btn-sm btn-primary">
         <i class="bi bi-box-arrow-up-right me-1"></i>Ver en zaragoza.es
       </a>
-      ${o.bases_url ? `<a href="${o.bases_url}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-text me-1"></i>Bases convocatoria</a>` : ""}
       <button class="btn btn-sm btn-outline-secondary" onclick="actualizarOferta('${o.oferta_id}')">
         <i class="bi bi-arrow-clockwise me-1"></i>Actualizar
       </button>
-      <button class="btn btn-sm btn-outline-success" onclick="leerPDF('${o.oferta_id}')" id="btn-pdf-${o.oferta_id}">
-        <i class="bi bi-file-earmark-pdf me-1"></i>Leer bases PDF
-      </button>
+      <a href="/api/ofertas/${o.oferta_id}/descargar-pdf" target="_blank" class="btn btn-sm btn-outline-success">
+        <i class="bi bi-file-earmark-pdf me-1"></i>Descargar PDF
+      </a>
     </div>
-    <div id="pdf-resultado-${o.oferta_id}" class="mb-3"></div>
     <div class="mb-3">${badgeEstado(o.estado)}</div>
     <div class="row g-3 mb-3">
       ${campo("Año oferta",        o.anio)}
@@ -907,74 +910,6 @@ function toast(msg, tipo = "secondary") {
 // ══════════════════════════════════════════════════════════════════════════════
 // Lectura de PDF de bases
 // ══════════════════════════════════════════════════════════════════════════════
-async function leerPDF(ofertaId) {
-  const btn = document.getElementById(`btn-pdf-${ofertaId}`);
-  const res_div = document.getElementById(`pdf-resultado-${ofertaId}`);
-  if (!btn || !res_div) return;
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Leyendo PDF...';
-  res_div.innerHTML = '';
-
-  const res = await api(`/api/ofertas/${ofertaId}/pdf`);
-  btn.disabled = false;
-  btn.innerHTML = '<i class="bi bi-file-earmark-pdf me-1"></i>Leer bases PDF';
-
-  if (!res?.ok) {
-    res_div.innerHTML = `<div class="alert alert-warning small py-2">${esc(res?.error || 'No se pudo leer el PDF')}</div>`;
-    return;
-  }
-
-  const c = res.datos.contenido;
-  if (!c) { res_div.innerHTML = '<div class="alert alert-warning small py-2">Sin contenido extraíble</div>'; return; }
-
-  if (c.advertencia) {
-    res_div.innerHTML = `<div class="alert alert-warning small py-2"><i class="bi bi-exclamation-triangle me-1"></i>${esc(c.advertencia)}</div>`;
-    return;
-  }
-
-  let html = `<div class="card border-success mt-2"><div class="card-header bg-success text-white small py-1">
-    <i class="bi bi-file-earmark-pdf me-1"></i>Bases de convocatoria — ${c.paginas} páginas
-    <a href="${res.datos.url_pdf}" target="_blank" class="float-end text-white small">Descargar PDF <i class="bi bi-download"></i></a>
-  </div><div class="card-body p-2">`;
-
-  // Temario
-  if (c.temario?.length) {
-    html += `<div class="mb-3">
-      <div class="fw-semibold small mb-1"><i class="bi bi-list-ol me-1"></i>Temario (${c.temario.length} temas)</div>
-      <div style="max-height:200px;overflow-y:auto;font-size:.78rem">
-        ${c.temario.map(t => `<div class="py-1 border-bottom"><span class="badge bg-secondary me-1">${t.numero}</span>${esc(t.texto)}</div>`).join('')}
-      </div></div>`;
-  }
-
-  // Puntuación
-  if (c.puntuacion) {
-    html += `<div class="mb-3">
-      <div class="fw-semibold small mb-1"><i class="bi bi-calculator me-1"></i>Puntuación / Baremo</div>
-      <div class="bg-light rounded p-2" style="font-size:.78rem">${esc(c.puntuacion)}</div>
-    </div>`;
-  }
-
-  // Requisitos
-  if (c.requisitos) {
-    html += `<div class="mb-3">
-      <div class="fw-semibold small mb-1"><i class="bi bi-person-check me-1"></i>Requisitos de participación</div>
-      <div class="bg-light rounded p-2" style="font-size:.78rem">${esc(c.requisitos)}</div>
-    </div>`;
-  }
-
-  // Fechas
-  if (c.fechas?.length) {
-    html += `<div>
-      <div class="fw-semibold small mb-1"><i class="bi bi-calendar-event me-1"></i>Fechas mencionadas en el documento</div>
-      <div class="d-flex flex-wrap gap-1">
-        ${c.fechas.map(f => `<span class="badge bg-info text-dark">${esc(f)}</span>`).join('')}
-      </div></div>`;
-  }
-
-  html += '</div></div>';
-  res_div.innerHTML = html;
-}
 
 // ══════════════════════════════════════════════════════════════════════════════
 // Info del scheduler

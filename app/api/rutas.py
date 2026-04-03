@@ -216,6 +216,35 @@ def leer_pdf_oferta(oferta_id: str):
         return _error(str(e))
 
 
+@api_bp.route("/ofertas/<oferta_id>/descargar-pdf")
+def descargar_pdf_oferta(oferta_id: str):
+    """
+    Resuelve y devuelve la URL directa del PDF para descargar.
+    Redirecciona directamente al PDF sin intentar leerlo.
+    """
+    try:
+        oferta_id = validar_oferta_id(oferta_id)
+        oferta    = _repo_oferta.obtener_por_id(oferta_id)
+        if not oferta:
+            return _error(f"Oferta {oferta_id} no encontrada", 404)
+
+        url_bases = oferta.get("bases_url")
+        if not url_bases:
+            return _error("Esta oferta no tiene URL de bases de convocatoria", 404)
+
+        url_pdf = _resolver_url_pdf(url_bases, oferta_id)
+        if not url_pdf:
+            return _error("No se encontró el PDF", 404)
+
+        from flask import redirect
+        return redirect(url_pdf)
+    except ErrorValidacion as e:
+        return _error(str(e), 400)
+    except Exception as e:
+        logger.error("Error al resolver PDF de oferta %s: %s", oferta_id, e, exc_info=True)
+        return _error(str(e))
+
+
 def _resolver_url_pdf(url_bases: str, oferta_id: str):
     """
     Intenta obtener la URL directa al PDF del BOPZ.
