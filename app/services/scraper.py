@@ -292,9 +292,16 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
             visto.add(key)
             anuncios_unicos.append(a)
 
-    datos['anuncios'] = anuncios_unicos
+    # Ordenar anuncios por fecha descendente (más recientes primero)
+    def _parse_fecha(fecha_str):
+        try:
+            return datetime.strptime(fecha_str, "%d/%m/%Y")
+        except (ValueError, TypeError):
+            return datetime.min  # Fechas inválidas al final
 
-    datos["anuncios"] = anuncios
+    anuncios_unicos.sort(key=lambda a: _parse_fecha(a.get('fecha', '')), reverse=True)
+
+    datos["anuncios"] = anuncios_unicos
 
     # ── Estado: determinado a partir de los anuncios y fechas ─────────────────
     datos["estado"] = _detectar_estado(datos)

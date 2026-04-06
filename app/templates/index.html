@@ -840,6 +840,25 @@ function ordenar(coleccion, campo, th) {
   estado[coleccion].sort((a, b) => {
     const va = a[campo] ?? ""; const vb = b[campo] ?? "";
     if (typeof va === "number") return asc ? va - vb : vb - va;
+
+    // Ordenación robusta para columnas de fecha
+    if (campo === 'ultima_actualizacion' || campo === 'fecha_instancia') {
+      const parseFecha = (str) => {
+        if (!str || str === "—") return new Date(0);
+        const texto = String(str).trim();
+        const m = texto.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+        if (m) {
+          const d = m[1].padStart(2, '0');
+          const M = m[2].padStart(2, '0');
+          return new Date(`${m[3]}-${M}-${d}`);
+        }
+        const parsed = new Date(texto);
+        return Number.isNaN(parsed.getTime()) ? new Date(0) : parsed;
+      };
+      const da = parseFecha(va), db = parseFecha(vb);
+      return asc ? da - db : db - da;
+    }
+
     return asc ? String(va).localeCompare(String(vb), "es") : String(vb).localeCompare(String(va), "es");
   });
   if (coleccion === "activos") renderActivos();

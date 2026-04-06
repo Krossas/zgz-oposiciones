@@ -117,7 +117,7 @@ class OfertaRepository:
                     SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                     FROM oferta o
                     INNER JOIN oferta_fts ON oferta_fts.oferta_id = o.oferta_id
-                    LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                    LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
                       ON a_max.oferta_id = o.oferta_id
                     WHERE oferta_fts MATCH :query AND o.es_activa = 1 {where_extra}
                     ORDER BY rank, o.nombre ASC
@@ -127,7 +127,7 @@ class OfertaRepository:
                 sql   = f"""
                     SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                     FROM oferta o
-                    LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                    LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
                       ON a_max.oferta_id = o.oferta_id
                     {where} ORDER BY o.nombre ASC
                 """
@@ -197,7 +197,7 @@ class OfertaRepository:
                     filas = conn.execute(
                         f"""SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                            FROM oferta o
-                           LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                           LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
                              ON a_max.oferta_id = o.oferta_id
                            WHERE o.id IN ({placeholders}) ORDER BY o.anio DESC, o.nombre ASC""",
                         ids_pagina
@@ -212,7 +212,7 @@ class OfertaRepository:
                 filas = conn.execute(
                     f"""SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                        FROM oferta o
-                       LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                       LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
                          ON a_max.oferta_id = o.oferta_id
                        {where} ORDER BY o.anio DESC, o.nombre ASC LIMIT :limite OFFSET :offset""",
                     params
@@ -233,7 +233,7 @@ class OfertaRepository:
             oferta = conn.execute(
                 """SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                    FROM oferta o
-                   LEFT JOIN (SELECT oferta_id, MAX(fecha) as ultima_actualizacion FROM anuncio GROUP BY oferta_id) a_max
+                   LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
                      ON a_max.oferta_id = o.oferta_id
                    WHERE o.oferta_id = ?""", (oferta_id,)
             ).fetchone()
@@ -242,7 +242,7 @@ class OfertaRepository:
                 return None
 
             anuncios = conn.execute(
-                "SELECT * FROM anuncio WHERE oferta_id = ? ORDER BY fecha DESC",
+                "SELECT * FROM anuncio WHERE oferta_id = ? ORDER BY substr(fecha, 7, 4) DESC, substr(fecha, 4, 2) DESC, substr(fecha, 1, 2) DESC",
                 (oferta_id,)
             ).fetchall()
 
