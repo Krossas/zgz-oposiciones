@@ -37,41 +37,43 @@ class OfertaRepository:
             INSERT INTO oferta (
                 oferta_id, nombre, grupo, anio, turno, plantilla, escala,
                 expediente, plazas, tipo_examen, titulacion, observaciones,
-                convocatoria_bop, convocatoria_boe, fecha_instancia, bases_url,
-                url, estado, es_activa, ultimo_scrape, actualizado_en
+                convocatoria_bop, convocatoria_boe, bases_url,
+                presentacion_instancias, instancia_inicio, instancia_fin, url, estado, es_activa, ultimo_scrape, actualizado_en
             ) VALUES (
                 :oferta_id, :nombre, :grupo, :anio, :turno, :plantilla, :escala,
                 :expediente, :plazas, :tipo_examen, :titulacion, :observaciones,
-                :convocatoria_bop, :convocatoria_boe, :fecha_instancia, :bases_url,
-                :url, :estado, :es_activa, :ultimo_scrape, :actualizado_en
+                :convocatoria_bop, :convocatoria_boe, :bases_url,
+                    :presentacion_instancias, :instancia_inicio, :instancia_fin, :url, :estado, :es_activa, :ultimo_scrape, :actualizado_en
             )
             ON CONFLICT(oferta_id) DO UPDATE SET
-                nombre           = excluded.nombre,
-                grupo            = excluded.grupo,
-                anio             = excluded.anio,
-                turno            = excluded.turno,
-                plantilla        = excluded.plantilla,
-                escala           = excluded.escala,
-                expediente       = excluded.expediente,
-                plazas           = excluded.plazas,
-                tipo_examen      = excluded.tipo_examen,
-                titulacion       = excluded.titulacion,
-                observaciones    = excluded.observaciones,
-                convocatoria_bop = excluded.convocatoria_bop,
-                convocatoria_boe = excluded.convocatoria_boe,
-                fecha_instancia  = excluded.fecha_instancia,
-                bases_url        = excluded.bases_url,
-                url              = excluded.url,
-                estado           = excluded.estado,
-                es_activa        = excluded.es_activa,
-                ultimo_scrape    = excluded.ultimo_scrape,
-                actualizado_en   = excluded.actualizado_en
+                nombre                   = excluded.nombre,
+                grupo                    = excluded.grupo,
+                anio                     = excluded.anio,
+                turno                    = excluded.turno,
+                plantilla                = excluded.plantilla,
+                escala                   = excluded.escala,
+                expediente               = excluded.expediente,
+                plazas                   = excluded.plazas,
+                tipo_examen              = excluded.tipo_examen,
+                titulacion               = excluded.titulacion,
+                observaciones            = excluded.observaciones,
+                convocatoria_bop         = excluded.convocatoria_bop,
+                convocatoria_boe         = excluded.convocatoria_boe,
+                bases_url                = excluded.bases_url,
+                presentacion_instancias  = excluded.presentacion_instancias,
+                    instancia_inicio          = excluded.instancia_inicio,
+                    instancia_fin             = excluded.instancia_fin,
+                url                      = excluded.url,
+                estado                   = excluded.estado,
+                es_activa                = excluded.es_activa,
+                ultimo_scrape            = excluded.ultimo_scrape,
+                actualizado_en           = excluded.actualizado_en
         """
         # SQLite con parametros nombrados exige que todos los campos esten en el dict.
         for campo in ["turno", "plantilla", "escala", "expediente", "plazas",
-                      "tipo_examen", "titulacion", "observaciones", "convocatoria_bop",
-                      "convocatoria_boe", "fecha_instancia", "bases_url", "url",
-                      "nombre", "grupo", "anio"]:
+                  "tipo_examen", "titulacion", "observaciones", "convocatoria_bop",
+                      "convocatoria_boe", "bases_url", "presentacion_instancias", "instancia_inicio", "instancia_fin", "url",
+                  "nombre", "grupo", "anio"]:
             datos.setdefault(campo, None)
         datos.setdefault("estado",         "pendiente")
         datos.setdefault("es_activa",      0)
@@ -117,8 +119,18 @@ class OfertaRepository:
                     SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                     FROM oferta o
                     INNER JOIN oferta_fts ON oferta_fts.oferta_id = o.oferta_id
-                    LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
-                      ON a_max.oferta_id = o.oferta_id
+                                        LEFT JOIN (
+                                                SELECT a.oferta_id, a.fecha AS ultima_actualizacion
+                                                FROM anuncio a
+                                                INNER JOIN (
+                                                    SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) AS max_fecha
+                                                    FROM anuncio
+                                                    GROUP BY oferta_id
+                                                ) x ON x.oferta_id = a.oferta_id
+                                                    AND substr(a.fecha, 7, 4) || substr(a.fecha, 4, 2) || substr(a.fecha, 1, 2) = x.max_fecha
+                                                GROUP BY a.oferta_id
+                                        ) a_max
+                                            ON a_max.oferta_id = o.oferta_id
                     WHERE oferta_fts MATCH :query AND o.es_activa = 1 {where_extra}
                     ORDER BY rank, o.nombre ASC
                 """
@@ -127,8 +139,18 @@ class OfertaRepository:
                 sql   = f"""
                     SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                     FROM oferta o
-                    LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
-                      ON a_max.oferta_id = o.oferta_id
+                                                     LEFT JOIN (
+                                                         SELECT a.oferta_id, a.fecha AS ultima_actualizacion
+                                                         FROM anuncio a
+                                                         INNER JOIN (
+                                                             SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) AS max_fecha
+                                                             FROM anuncio
+                                                             GROUP BY oferta_id
+                                                         ) x ON x.oferta_id = a.oferta_id
+                                                             AND substr(a.fecha, 7, 4) || substr(a.fecha, 4, 2) || substr(a.fecha, 1, 2) = x.max_fecha
+                                                         GROUP BY a.oferta_id
+                                                     ) a_max
+                                                         ON a_max.oferta_id = o.oferta_id
                     {where} ORDER BY o.nombre ASC
                 """
 
@@ -197,8 +219,18 @@ class OfertaRepository:
                     filas = conn.execute(
                         f"""SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                            FROM oferta o
-                           LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
-                             ON a_max.oferta_id = o.oferta_id
+                                                     LEFT JOIN (
+                                                         SELECT a.oferta_id, a.fecha AS ultima_actualizacion
+                                                         FROM anuncio a
+                                                         INNER JOIN (
+                                                             SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) AS max_fecha
+                                                             FROM anuncio
+                                                             GROUP BY oferta_id
+                                                         ) x ON x.oferta_id = a.oferta_id
+                                                             AND substr(a.fecha, 7, 4) || substr(a.fecha, 4, 2) || substr(a.fecha, 1, 2) = x.max_fecha
+                                                         GROUP BY a.oferta_id
+                                                     ) a_max
+                                                         ON a_max.oferta_id = o.oferta_id
                            WHERE o.id IN ({placeholders}) ORDER BY o.anio DESC, o.nombre ASC""",
                         ids_pagina
                     ).fetchall()
@@ -212,8 +244,18 @@ class OfertaRepository:
                 filas = conn.execute(
                     f"""SELECT o.*, COALESCE(a_max.ultima_actualizacion, NULL) as ultima_actualizacion
                        FROM oferta o
-                       LEFT JOIN (SELECT oferta_id, fecha as ultima_actualizacion FROM anuncio WHERE (oferta_id, substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) IN (SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) FROM anuncio GROUP BY oferta_id)) a_max
-                         ON a_max.oferta_id = o.oferta_id
+                                             LEFT JOIN (
+                                                 SELECT a.oferta_id, a.fecha AS ultima_actualizacion
+                                                 FROM anuncio a
+                                                 INNER JOIN (
+                                                     SELECT oferta_id, MAX(substr(fecha, 7, 4) || substr(fecha, 4, 2) || substr(fecha, 1, 2)) AS max_fecha
+                                                     FROM anuncio
+                                                     GROUP BY oferta_id
+                                                 ) x ON x.oferta_id = a.oferta_id
+                                                     AND substr(a.fecha, 7, 4) || substr(a.fecha, 4, 2) || substr(a.fecha, 1, 2) = x.max_fecha
+                                                 GROUP BY a.oferta_id
+                                             ) a_max
+                                                 ON a_max.oferta_id = o.oferta_id
                        {where} ORDER BY o.anio DESC, o.nombre ASC LIMIT :limite OFFSET :offset""",
                     params
                 ).fetchall()
@@ -276,6 +318,7 @@ class OfertaRepository:
 
     def guardar_oferta_anual(self, datos: dict) -> None:
         """Inserta o ignora una entrada del cuadro de ofertas anual."""
+        datos["oferta_id"] = datos.get("oferta_id") or ""
         sql = """
             INSERT OR IGNORE INTO oferta_anual
                 (anio, nombre, oferta_id, plazas, grupo, procedimiento, titulacion, observaciones, url)

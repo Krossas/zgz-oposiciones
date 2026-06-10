@@ -173,7 +173,7 @@
               <option>C1</option><option>C2</option><option>E</option>
             </select>
           </div>
-          <div class="col-6 col-md-3">
+          <div class="col-6 col-md-2">
             <select class="form-select form-select-sm" id="f-activos-estado" onchange="renderActivos()">
               <option value="">Estado (todos)</option>
               <option value="inscripcion_abierta">Inscripción abierta</option>
@@ -185,9 +185,17 @@
               <option value="pendiente">Pendiente</option>
             </select>
           </div>
-          <div class="col-12 col-md-3 text-muted small" id="cnt-activos"></div>
+          <div class="col-12 col-md-2 text-end text-md-end">
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleColumnManager('activos')">
+              <i class="bi bi-layout-three-columns me-1"></i>Columnas
+            </button>
+          </div>
+          <div class="col-12 col-md-2 text-muted small" id="cnt-activos"></div>
         </div>
       </div>
+    </div>
+    <div id="panel-columnas-activos" class="card border-0 shadow-sm mb-3 d-none">
+      <div class="card-body p-3" id="panel-columnas-activos-body"></div>
     </div>
     <div class="card border-0 shadow-sm">
       <div class="table-responsive" id="tabla-activos">
@@ -213,9 +221,17 @@
               <option>C1</option><option>C2</option><option>E</option>
             </select>
           </div>
+          <div class="col-6 col-md-2 text-end text-md-end">
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleColumnManager('anuales')">
+              <i class="bi bi-layout-three-columns me-1"></i>Columnas
+            </button>
+          </div>
           <div class="col-12 col-md-3 text-muted small" id="cnt-anuales"></div>
         </div>
       </div>
+    </div>
+    <div id="panel-columnas-anuales" class="card border-0 shadow-sm mb-3 d-none">
+      <div class="card-body p-3" id="panel-columnas-anuales-body"></div>
     </div>
     <div class="card border-0 shadow-sm">
       <div class="table-responsive" id="tabla-anuales">
@@ -272,6 +288,11 @@
               <option value="">Año (todos)</option>
             </select>
           </div>
+          <div class="col-12 col-md-2 text-end text-md-end">
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleColumnManager('todas')">
+              <i class="bi bi-layout-three-columns me-1"></i>Columnas
+            </button>
+          </div>
           <div class="col-4 col-md-2">
             <select class="form-select form-select-sm" id="f-todas-grupo" onchange="renderTodas()">
               <option value="">Grupo (todos)</option>
@@ -282,6 +303,9 @@
           <div class="col text-muted small" id="cnt-todas"></div>
         </div>
       </div>
+    </div>
+    <div id="panel-columnas-todas" class="card border-0 shadow-sm mb-3 d-none">
+      <div class="card-body p-3" id="panel-columnas-todas-body"></div>
     </div>
     <div class="card border-0 shadow-sm">
       <div class="table-responsive" id="tabla-todas">
@@ -383,6 +407,155 @@ const ESTADOS = {
   resuelto:              ["secondary",          "Resuelto"],
   pendiente:             ["light text-dark",    "Pendiente"],
 };
+
+const COLUMN_DEFS = {
+  activos: [
+    { key: "nombre", label: "Denominación", sortable: true, cell: o => `<span class="fw-500">${esc(o.nombre)}</span>` },
+    { key: "grupo", label: "Grupo", cell: o => `<span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo || "—")}</span>` },
+    { key: "anio", label: "Año", sortable: true, cell: o => o.anio || "—" },
+    { key: "plazas", label: "Plazas", cell: o => `<span class="small">${esc(formatPlazas(o.plazas))}</span>` },
+    { key: "estado", label: "Estado", cell: o => badgeEstado(o.estado) },
+    { key: "instancia_inicio", label: "Instancia inicio", sortable: true, cell: o => `<span class="text-muted small">${esc(formatFechaCol(o.instancia_inicio) || "—")}</span>` },
+    { key: "instancia_fin", label: "Instancia fin", sortable: true, cell: o => `<span class="text-muted small">${esc(formatFechaCol(o.instancia_fin) || "—")}</span>` },
+    { key: "ultima_actualizacion", label: "Última actualización", sortable: true, cell: o => `<span class="text-muted small">${esc(formatFechaCol(o.ultima_actualizacion) || "—")}</span>` },
+  ],
+  todas: [
+    { key: "nombre", label: "Denominación", sortable: true, cell: o => esc(o.nombre) },
+    { key: "anio", label: "Año", sortable: true, cell: o => o.anio || "—" },
+    { key: "grupo", label: "Grupo", cell: o => `<span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo || "—")}</span>` },
+    { key: "plazas", label: "Plazas", cell: o => `<span class="small">${esc(formatPlazas(o.plazas))}</span>` },
+    { key: "estado", label: "Estado", cell: o => badgeEstado(o.estado) },
+    { key: "tipo_examen", label: "Tipo", cell: o => `<span class="small">${esc(o.tipo_examen || "—")}</span>` },
+    { key: "instancia_inicio", label: "Instancia inicio", sortable: true, cell: o => `<span class="text-muted small">${esc(formatFechaCol(o.instancia_inicio) || "—")}</span>` },
+    { key: "instancia_fin", label: "Instancia fin", sortable: true, cell: o => `<span class="text-muted small">${esc(formatFechaCol(o.instancia_fin) || "—")}</span>` },
+    { key: "ultima_actualizacion", label: "Última actualización", sortable: true, cell: o => `<span class="text-muted small">${esc(formatFechaCol(o.ultima_actualizacion) || "—")}</span>` },
+  ],
+  anuales: [
+    { key: "nombre", label: "Denominación", cell: o => `<span class="fw-500">${esc(o.nombre)}</span>` },
+    { key: "plazas", label: "Plazas", cell: o => esc(o.plazas || "—") },
+    { key: "grupo", label: "Grupo", cell: o => `<span class="badge" style="background:var(--zgz-azul)">${esc(o.grupo || "—")}</span>` },
+    { key: "procedimiento", label: "Procedimiento", cell: o => `<span class="small">${esc(o.procedimiento || "—")}</span>` },
+    { key: "titulacion", label: "Titulación", cell: o => `<span class="small text-truncate d-inline-block" style="max-width:200px">${esc(o.titulacion || "—")}</span>` },
+  ]
+};
+
+const COLUMN_PREFS_STORAGE_KEY = "zgz_oposiciones_column_prefs";
+let columnPrefs = cargarPreferenciasColumnas();
+
+function cargarPreferenciasColumnas() {
+  const construirPrefs = (savedCollection, collection) => {
+    const keys = COLUMN_DEFS[collection].map(c => c.key);
+    const savedOrder = Array.isArray(savedCollection?.order)
+      ? savedCollection.order.filter(k => keys.includes(k))
+      : [];
+    const order = [...savedOrder, ...keys.filter(k => !savedOrder.includes(k))];
+
+    const savedVisible = Array.isArray(savedCollection?.visible)
+      ? savedCollection.visible.filter(k => keys.includes(k))
+      : keys;
+    const visible = new Set([...savedVisible, ...keys.filter(k => !savedVisible.includes(k))]);
+
+    return { order, visible };
+  };
+
+  try {
+    const raw = localStorage.getItem(COLUMN_PREFS_STORAGE_KEY);
+    if (!raw) throw new Error("sin prefs");
+    const saved = JSON.parse(raw);
+    return {
+      activos: construirPrefs(saved.activos, "activos"),
+      todas:   construirPrefs(saved.todas,   "todas"),
+      anuales: construirPrefs(saved.anuales, "anuales"),
+    };
+  } catch (e) {
+    return {
+      activos: construirPrefs(null, "activos"),
+      todas:   construirPrefs(null, "todas"),
+      anuales: construirPrefs(null, "anuales"),
+    };
+  }
+}
+
+function guardarPreferenciasColumnas() {
+  const payload = {
+    activos: { order: columnPrefs.activos.order, visible: [...columnPrefs.activos.visible] },
+    todas:   { order: columnPrefs.todas.order, visible: [...columnPrefs.todas.visible] },
+    anuales: { order: columnPrefs.anuales.order, visible: [...columnPrefs.anuales.visible] },
+  };
+  localStorage.setItem(COLUMN_PREFS_STORAGE_KEY, JSON.stringify(payload));
+}
+
+function getColumnDef(collection, key) {
+  return COLUMN_DEFS[collection].find(c => c.key === key);
+}
+
+function toggleColumnManager(collection) {
+  const panel = document.getElementById(`panel-columnas-${collection}`);
+  if (!panel) return;
+  if (panel.classList.contains("d-none")) renderColumnManager(collection);
+  panel.classList.toggle("d-none");
+}
+
+function renderColumnManager(collection) {
+  const prefs = columnPrefs[collection];
+  const wrapper = document.getElementById(`panel-columnas-${collection}-body`);
+  if (!wrapper) return;
+
+  const items = prefs.order.map((key, index) => {
+    const col = getColumnDef(collection, key);
+    if (!col) return "";
+    return `
+      <div class="d-flex align-items-center justify-content-between mb-1">
+        <label class="form-check form-check-inline mb-0">
+          <input class="form-check-input" type="checkbox" ${prefs.visible.has(key) ? "checked" : ""}
+                 onchange="toggleColumnVisible('${collection}','${key}')">
+          <span class="form-check-label">${esc(col.label)}</span>
+        </label>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-outline-secondary" onclick="moveColumn('${collection}','${key}',-1)" ${index === 0 ? "disabled" : ""}>↑</button>
+          <button type="button" class="btn btn-outline-secondary" onclick="moveColumn('${collection}','${key}',1)" ${index === prefs.order.length - 1 ? "disabled" : ""}>↓</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  wrapper.innerHTML = `
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div><strong>Columnas</strong></div>
+      <button class="btn btn-sm btn-outline-secondary" onclick="toggleColumnManager('${collection}')">Cerrar</button>
+    </div>
+    <div>${items}</div>
+    <small class="text-muted">Arrastra no es necesario: usa las flechas para reordenar.</small>
+  `;
+}
+
+function toggleColumnVisible(collection, key) {
+  const prefs = columnPrefs[collection];
+  if (prefs.visible.has(key)) prefs.visible.delete(key);
+  else prefs.visible.add(key);
+  guardarPreferenciasColumnas();
+  renderColumnManager(collection);
+  if (collection === "activos") renderActivos();
+  else if (collection === "todas") renderTodas();
+}
+
+function moveColumn(collection, key, direction) {
+  const prefs = columnPrefs[collection];
+  const index = prefs.order.indexOf(key);
+  const target = index + direction;
+  if (index < 0 || target < 0 || target >= prefs.order.length) return;
+  const next = [...prefs.order];
+  [next[index], next[target]] = [next[target], next[index]];
+  prefs.order = next;
+  guardarPreferenciasColumnas();
+  renderColumnManager(collection);
+  if (collection === "activos") renderActivos();
+  else if (collection === "todas") renderTodas();
+}
+
+function cerrarColumnManager(collection) {
+  const panel = document.getElementById(`panel-columnas-${collection}`);
+  if (panel) panel.classList.add("d-none");
+}
 
 // ══════════════════════════════════════════════════════════════════════════════
 // Inicialización
@@ -563,7 +736,7 @@ function renderActivos() {
   if (est)   datos = datos.filter(o => o.estado === est);
 
   set("cnt-activos", `${datos.length} resultado${datos.length !== 1 ? "s" : ""}`);
-  renderTabla("tabla-activos", datos, columnaActivos, "Sin procesos activos.");
+  renderTabla("tabla-activos", datos, "activos", "Sin procesos activos.");
 }
 
 function renderAnuales() {
@@ -575,7 +748,7 @@ function renderAnuales() {
   if (grupo) datos = datos.filter(o => o.grupo === grupo);
 
   set("cnt-anuales", `${datos.length} entrada${datos.length !== 1 ? "s" : ""}`);
-  renderTabla("tabla-anuales", datos, columnaAnuales, "Sin datos para este año.");
+  renderTabla("tabla-anuales", datos, "anuales", "Sin datos para este año.");
 }
 
 function renderTodas() {
@@ -589,7 +762,7 @@ function renderTodas() {
   if (grupo) datos = datos.filter(o => o.grupo === grupo);
 
   set("cnt-todas", `${datos.length} ficha${datos.length !== 1 ? "s" : ""}`);
-  renderTabla("tabla-todas", datos.slice(0, 500), columnasTodas, "Sin fichas disponibles.");
+  renderTabla("tabla-todas", datos.slice(0, 500), "todas", "Sin fichas disponibles.");
 }
 
 function renderFrecuencia() {
@@ -631,13 +804,29 @@ function renderFrecuencia() {
 // ══════════════════════════════════════════════════════════════════════════════
 // Tabla genérica
 // ══════════════════════════════════════════════════════════════════════════════
-function renderTabla(idContenedor, datos, fnColumnas, mensajeVacio) {
+function renderTabla(idContenedor, datos, collection, mensajeVacio) {
   const cont = document.getElementById(idContenedor);
   if (!datos.length) {
     cont.innerHTML = `<div class="empty-state"><i class="bi bi-search"></i><p>${mensajeVacio}</p></div>`;
     return;
   }
-  const { cabecera, filas } = fnColumnas(datos);
+
+  const prefs = columnPrefs[collection];
+  const columnasVisibles = prefs.order
+    .map(key => getColumnDef(collection, key))
+    .filter(col => col && prefs.visible.has(col.key));
+
+  const cabecera = columnasVisibles.map(col => `
+      <th ${col.sortable ? `class="sortable" onclick="ordenar('${collection}','${col.key}',this)"` : ""}>
+        ${esc(col.label)}
+      </th>`).join("");
+
+  const filas = datos.map(o => {
+    const fila = columnasVisibles.map(col => `<td>${col.cell(o)}</td>`).join("");
+    const clickable = o.oferta_id ? `class="fila-clickable" onclick="abrirDetalle('${o.oferta_id}')"` : "";
+    return `<tr ${clickable}>${fila}</tr>`;
+  }).join("");
+
   cont.innerHTML = `
     <table class="table table-hover table-bordered mb-0">
       <thead><tr>${cabecera}</tr></thead>
@@ -731,7 +920,9 @@ async function abrirDetalle(ofertaId) {
       ${campo("Total plazas",      o.plazas)}
       ${campo("Tipo examen",       o.tipo_examen)}
       ${campo("Turno",             o.turno)}
-      ${campo("Fecha límite inst.", o.fecha_instancia)}
+      ${campo("Plazo instancias",  o.fecha_instancia)}
+      ${campo("Instancia inicio", o.instancia_inicio)}
+      ${campo("Instancia fin", o.instancia_fin)}
       ${campo("Titulación exigida", o.titulacion, false, true)}
       ${campo("Escala / Cuerpo",    o.escala,     false, true)}
       ${o.convocatoria_bop ? campo("BOPZ", o.convocatoria_bop) : ""}
@@ -842,20 +1033,9 @@ function ordenar(coleccion, campo, th) {
     if (typeof va === "number") return asc ? va - vb : vb - va;
 
     // Ordenación robusta para columnas de fecha
-    if (campo === 'ultima_actualizacion' || campo === 'fecha_instancia') {
-      const parseFecha = (str) => {
-        if (!str || str === "—") return new Date(0);
-        const texto = String(str).trim();
-        const m = texto.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
-        if (m) {
-          const d = m[1].padStart(2, '0');
-          const M = m[2].padStart(2, '0');
-          return new Date(`${m[3]}-${M}-${d}`);
-        }
-        const parsed = new Date(texto);
-        return Number.isNaN(parsed.getTime()) ? new Date(0) : parsed;
-      };
-      const da = parseFecha(va), db = parseFecha(vb);
+    if (["ultima_actualizacion", "instancia_inicio", "instancia_fin", "fecha_instancia"].includes(campo)) {
+      const da = parseFechaString(va) || new Date(0);
+      const db = parseFechaString(vb) || new Date(0);
       return asc ? da - db : db - da;
     }
 
@@ -897,6 +1077,42 @@ function formatPlazas(plazas) {
   const m = plazas.match(/Total:\s*(\d+)/i);
   if (m) return m[1] + " (total)";
   return plazas.split("\n")[0].trim().slice(0, 50);
+}
+
+function parseFechaString(value) {
+  if (!value) return null;
+  const texto = String(value).trim();
+  if (!texto || texto === "—") return null;
+
+  const isoMatch = texto.match(/^\d{4}-\d{2}-\d{2}(?:[T\s].*)?$/);
+  if (isoMatch) {
+    const parsed = new Date(texto);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  const compactMatch = texto.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (compactMatch) {
+    const parsed = new Date(`${compactMatch[1]}-${compactMatch[2]}-${compactMatch[3]}`);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  const dmyMatch = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s+.*)?$/);
+  if (dmyMatch) {
+    const d = dmyMatch[1].padStart(2, "0");
+    const m = dmyMatch[2].padStart(2, "0");
+    const y = dmyMatch[3];
+    const parsed = new Date(`${y}-${m}-${d}`);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  const parsed = new Date(texto);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatFechaCol(value) {
+  const fecha = parseFechaString(value);
+  if (!fecha) return value || "—";
+  return fecha.toLocaleDateString("es-ES");
 }
 
 function formatFecha(iso) {

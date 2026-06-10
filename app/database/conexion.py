@@ -27,6 +27,8 @@ def inicializar_base_de_datos():
     with obtener_conexion() as conn:
         # executescript ejecuta múltiples sentencias SQL separadas por ;
         conn.executescript(esquema_sql)
+        _migrar_esquema(conn)
+        _limpiar_duplicados_oferta_anual(conn)
 
     logger.info("Base de datos inicializada en: %s", Config.DB_PATH)
 
@@ -71,3 +73,45 @@ def obtener_conexion():
     finally:
         if conn:
             conn.close()
+
+
+def _migrar_esquema(conn):
+    """Aplica cambios incrementales a la base de datos existente."""
+    columnas = [fila[1] for fila in conn.execute("PRAGMA table_info(oferta)").fetchall()]
+    if "presentacion_instancias" not in columnas:
+        conn.execute("ALTER TABLE oferta ADD COLUMN presentacion_instancias TEXT")
+    if "instancia_inicio" not in columnas:
+        conn.execute("ALTER TABLE oferta ADD COLUMN instancia_inicio TEXT")
+    if "instancia_fin" not in columnas:
+        conn.execute("ALTER TABLE oferta ADD COLUMN instancia_fin TEXT")
+
+
+def _limpiar_duplicados_oferta_anual(conn):
+    """Elimina duplicados antiguos de oferta_anual y normaliza oferta_id."""
+    conn.execute("""
+        DELETE FROM oferta_anual
+        WHERE id NOT IN (
+            SELECT MIN(id)
+            FROM oferta_anual
+            GROUP BY anio, nombre, oferta_id
+        )
+    """)
+    conn.execute("UPDATE oferta_anual SET oferta_id = '' WHERE oferta_id IS NULL")
+    
+    # Limpiar duplicados en 'oferta' basados en 'oferta_id' (mantener la versión más reciente)
+    dup_ofertas = [r[0] for r in conn.execute("SELECT oferta_id FROM oferta WHERE oferta_id IS NOT NULL AND oferta_id != '' GROUP BY oferta_id HAVING COUNT(*) > 1").fetchall()]
+    for oferta_id in dup_ofertas:
+        fila = conn.execute("SELECT id FROM oferta WHERE oferta_id = ? ORDER BY datetime(actualizado_en) DESC LIMIT 1", (oferta_id,)).fetchone()
+        if not fila:
+            continue
+        keep_id = fila[0]
+        otros = [r[0] for r in conn.execute("SELECT id FROM oferta WHERE oferta_id = ? AND id != ?", (oferta_id, keep_id)).fetchall()]
+        if otros:
+            placeholders = ",".join(["?" for _ in otros])
+            conn.execute(f"DELETE FROM oferta WHERE id IN ({placeholders})", otros)
+    
+    # NOTA: no se limpian duplicados por 'expediente' aquí porque la clave
+    # autorizada para identificar fichas es 'oferta_id' (id de la URL).
+    # Si en el pasado se generaron entradas duplicadas por expediente,
+    # quedaron fuera de la limpieza automática para evitar borrar convocatorias
+    # legítimas que comparten expediente.

@@ -24,8 +24,10 @@ CREATE TABLE IF NOT EXISTS oferta (
     observaciones    TEXT,
     convocatoria_bop TEXT,
     convocatoria_boe TEXT,
-    fecha_instancia  TEXT,                       -- Fecha límite de presentación de instancias
     bases_url        TEXT,                       -- URL a las bases de la convocatoria
+    presentacion_instancias TEXT,                -- Texto del anuncio de presentación de instancias
+    instancia_inicio TEXT,                        -- Fecha inicio de plazo (DD/MM/YYYY u otro formato legible)
+    instancia_fin    TEXT,                        -- Fecha fin de plazo (DD/MM/YYYY u otro formato legible)
     url              TEXT,                       -- URL completa a la ficha en zaragoza.es
     estado           TEXT DEFAULT 'pendiente',   -- Ver servicio: detectar_estado()
     es_activa        INTEGER DEFAULT 0,          -- 1 si aparece en "Procesos abiertos"
@@ -55,7 +57,7 @@ CREATE TABLE IF NOT EXISTS oferta_anual (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     anio         INTEGER NOT NULL,
     nombre       TEXT    NOT NULL,
-    oferta_id    TEXT,                           -- Puede ser NULL si aún no hay ficha
+    oferta_id    TEXT NOT NULL DEFAULT '',       -- Normalizamos a cadena vacía cuando no hay ficha
     plazas       TEXT,
     grupo        TEXT,
     procedimiento TEXT,                          -- Oposición, Concurso, Concurso-oposición

@@ -73,14 +73,37 @@ def _limpiar_texto(texto: Optional[str]) -> Optional[str]:
     return " ".join(texto.split()).strip() or None
 
 
+def _completar_url(href: str, es_anuncio: bool = False) -> str:
+    """
+    Convierte un href relativo a una URL completa.
+    
+    Si href es:
+    - Una URL completa (http/https): devuelve como está
+    - Comienza con '/': concatena con BASE_URL
+    - No comienza con '/': si es_anuncio=True, prepende '/oferta/' primero; luego concatena con BASE_URL
+    """
+    if not href:
+        return ""
+    if href.startswith("http"):
+        return href
+    if href.startswith("/"):
+        return Config.BASE_URL + href
+    # Caso relativo sin barra: prepender /oferta/ si es anuncio
+    if es_anuncio:
+        return Config.BASE_URL + "/oferta/" + href
+    return Config.BASE_URL + "/" + href
+
+
 # ── Scraping de la lista de procesos abiertos ──────────────────────────────────
 
 def obtener_procesos_abiertos() -> list[dict]:
     """
     Scraping de todas las páginas de /oferta/abierto.jsp (paginada).
     Devuelve una lista con {oferta_id, nombre, grupo, url} por proceso.
+    Deduplica en memoria por (oferta_id, nombre, grupo) para evitar registros duplicados.
     """
     resultados = []
+    vistos     = set()
     pagina     = 0
 
     while True:
@@ -111,11 +134,23 @@ def obtener_procesos_abiertos() -> list[dict]:
             if not id_match:
                 continue
 
+            oferta_id = id_match.group(1)
+            nombre    = _limpiar_texto(enlace.get_text())
+            grupo      = _limpiar_texto(celdas[1].get_text())
+            url_proc   = Config.BASE_URL + href if not href.startswith("http") else href
+            
+            # Clave de dedup: (oferta_id, nombre, grupo) para evitar duplicados idénticos
+            key = (oferta_id, nombre, grupo)
+            if key in vistos:
+                logger.debug("Descartando duplicado en memoria: oferta_id=%s nombre=%s", oferta_id, nombre)
+                continue
+            vistos.add(key)
+
             resultados.append({
-                "oferta_id": id_match.group(1),
-                "nombre":    _limpiar_texto(enlace.get_text()),
-                "grupo":     _limpiar_texto(celdas[1].get_text()),
-                "url":       Config.BASE_URL + href if not href.startswith("http") else href,
+                "oferta_id": oferta_id,
+                "nombre":    nombre,
+                "grupo":     grupo,
+                "url":       url_proc,
             })
             filas_pagina += 1
 
@@ -236,8 +271,8 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
                     if a:
                         texto = _limpiar_texto(a.get_text())
                         url_anuncio = a.get('href', '')
-                        if url_anuncio and not url_anuncio.startswith('http'):
-                            url_anuncio = Config.BASE_URL + url_anuncio
+                        if url_anuncio:
+                            url_anuncio = _completar_url(url_anuncio, es_anuncio=True)
 
                     if not texto:
                         raw = _limpiar_texto(dt.get_text())
@@ -269,13 +304,13 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
                         if a:
                             texto = _limpiar_texto(a.get_text())
                             url_anuncio = a.get('href', '')
-                            if url_anuncio and not url_anuncio.startswith('http'):
-                                url_anuncio = Config.BASE_URL + url_anuncio
+                            if url_anuncio:
+                                url_anuncio = _completar_url(url_anuncio, es_anuncio=True)
                             _registrar_anuncio(fecha or '', texto, url_anuncio)
                 if not anuncios:
                     for a in elemento.find_all('a') if hasattr(elemento, 'find_all') else []:
                         href = a.get('href', '')
-                        href_full = Config.BASE_URL + href if href and not href.startswith('http') else href
+                        href_full = _completar_url(href, es_anuncio=True) if href else ""
                         texto = _limpiar_texto(a.get_text())
                         # fecha puede aparecer en el mismo bloque de texto completo
                         fecha_match = re.search(r"(\d{2}/\d{2}/\d{4})", texto_completo or "")
@@ -302,13 +337,50 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
     anuncios_unicos.sort(key=lambda a: _parse_fecha(a.get('fecha', '')), reverse=True)
 
     datos["anuncios"] = anuncios_unicos
+    datos["presentacion_instancias"] = _extraer_presentacion_instancias(anuncios_unicos)
+    inicio, fin = _extraer_instancias_fechas(anuncios_unicos)
+    datos["instancia_inicio"] = inicio
+    datos["instancia_fin"] = fin
 
     # ── Estado: determinado a partir de los anuncios y fechas ─────────────────
     datos["estado"] = _detectar_estado(datos)
 
     logger.debug("Detalle obtenido: %s — %s — %d anuncios",
-                 oferta_id, datos.get("nombre"), len(anuncios))
+                 oferta_id, datos.get("nombre"), len(anuncios_unicos))
     return datos
+
+
+def _extraer_presentacion_instancias(anuncios: list[dict]) -> Optional[str]:
+    """Extrae la línea de presentación de instancias de los anuncios, si existe."""
+    for anuncio in anuncios:
+        texto = anuncio.get("texto") or ""
+        if re.search(r"presentaci[oó]n de instancias", texto, re.I):
+            return _limpiar_texto(texto)
+    return None
+
+
+def _extraer_instancias_fechas(anuncios: list[dict]) -> tuple[Optional[str], Optional[str]]:
+    """Extrae las dos fechas (inicio, fin) de la presentación de instancias si están presentes.
+
+    Busca en los anuncios la primera ocurrencia que contenga 'presentación de instancias' o palabras clave
+    relacionadas y extrae las dos primeras fechas en formato DD/MM/YYYY. Devuelve tupla (inicio, fin).
+    """
+    for anuncio in anuncios:
+        texto = anuncio.get("texto") or ""
+        if "instancia" in texto.lower() or "presentaci" in texto.lower() or "plazo" in texto.lower():
+            fechas = re.findall(r"(\d{1,2}/\d{1,2}/\d{4})", texto)
+            if len(fechas) >= 2:
+                inicio = fechas[0]
+                fin = fechas[1]
+                return (_limpiar_texto(inicio), _limpiar_texto(fin))
+    # Fallback: buscar en cualquier anuncio
+    todas_fechas = []
+    for a in anuncios:
+        texto = a.get("texto") or ""
+        todas_fechas.extend(re.findall(r"(\d{1,2}/\d{1,2}/\d{4})", texto))
+        if len(todas_fechas) >= 2:
+            return (_limpiar_texto(todas_fechas[0]), _limpiar_texto(todas_fechas[1]))
+    return (None, None)
 
 
 def _detectar_estado(datos: dict) -> str:
@@ -428,6 +500,7 @@ def obtener_cuadro_anual(anio: int) -> list[dict]:
 
     tabla    = soup.find("table")
     entradas = []
+    vistos   = set()
 
     if not tabla:
         logger.warning("No se encontró tabla en el cuadro de %d", anio)
@@ -454,6 +527,21 @@ def obtener_cuadro_anual(anio: int) -> list[dict]:
         if id_match:
             oferta_id  = id_match.group(1)
             url_oferta = Config.BASE_URL + href if not href.startswith("http") else href
+
+        key = (
+            anio,
+            nombre,
+            oferta_id or "",
+            _limpiar_texto(celdas[1].get_text()) if len(celdas) > 1 else None,
+            _limpiar_texto(celdas[2].get_text()) if len(celdas) > 2 else None,
+            _limpiar_texto(celdas[3].get_text()) if len(celdas) > 3 else None,
+            _limpiar_texto(celdas[4].get_text()) if len(celdas) > 4 else None,
+            _limpiar_texto(celdas[5].get_text()) if len(celdas) > 5 else None,
+            url_oferta or "",
+        )
+        if key in vistos:
+            continue
+        vistos.add(key)
 
         entradas.append({
             "anio":          anio,
