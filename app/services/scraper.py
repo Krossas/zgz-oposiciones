@@ -15,6 +15,7 @@ import re
 import time
 from datetime import datetime
 from typing import Optional
+from urllib.parse import urljoin
 
 import dateparser
 from dateparser.search import search_dates
@@ -73,25 +74,35 @@ def _limpiar_texto(texto: Optional[str]) -> Optional[str]:
     return " ".join(texto.split()).strip() or None
 
 
-def _completar_url(href: str, es_anuncio: bool = False) -> str:
+def _completar_url(href: str, es_anuncio: bool = False, es_oferta: bool = False) -> str:
     """
     Convierte un href relativo a una URL completa.
-    
-    Si href es:
-    - Una URL completa (http/https): devuelve como está
-    - Comienza con '/': concatena con BASE_URL
-    - No comienza con '/': si es_anuncio=True, prepende '/oferta/' primero; luego concatena con BASE_URL
+
+    - URLs absolutas se devuelven tal cual.
+    - URLs raíz (/...) se concatenan con BASE_URL.
+    - Para enlaces relacionados con oferta/anuncio, las rutas relativas se normalizan dentro de /oferta/.
     """
     if not href:
         return ""
+    href = href.strip()
     if href.startswith("http"):
         return href
+    if href.startswith("//"):
+        return "https:" + href
+
+    is_oferta = es_anuncio or es_oferta
+
     if href.startswith("/"):
-        return Config.BASE_URL + href
-    # Caso relativo sin barra: prepender /oferta/ si es anuncio
-    if es_anuncio:
-        return Config.BASE_URL + "/oferta/" + href
-    return Config.BASE_URL + "/" + href
+        if is_oferta and not href.lower().startswith("/oferta/"):
+            return urljoin(Config.BASE_URL + "/", "/oferta" + href)
+        return urljoin(Config.BASE_URL + "/", href)
+
+    if is_oferta:
+        if href.lower().startswith("oferta/"):
+            return urljoin(Config.BASE_URL + "/", href)
+        return urljoin(Config.BASE_URL + "/oferta/", href)
+
+    return urljoin(Config.BASE_URL + "/", href)
 
 
 # ── Scraping de la lista de procesos abiertos ──────────────────────────────────
@@ -137,7 +148,7 @@ def obtener_procesos_abiertos() -> list[dict]:
             oferta_id = id_match.group(1)
             nombre    = _limpiar_texto(enlace.get_text())
             grupo      = _limpiar_texto(celdas[1].get_text())
-            url_proc   = Config.BASE_URL + href if not href.startswith("http") else href
+            url_proc   = _completar_url(href, es_oferta=True) if href else ""
             
             # Clave de dedup: (oferta_id, nombre, grupo) para evitar duplicados idénticos
             key = (oferta_id, nombre, grupo)
@@ -235,7 +246,7 @@ def obtener_detalle_oferta(oferta_id: str) -> dict:
     enlace_bases = soup.find("a", string=re.compile("Ver Bases", re.I))
     if enlace_bases and enlace_bases.get("href"):
         href = enlace_bases["href"]
-        datos["bases_url"] = Config.BASE_URL + href if not href.startswith("http") else href
+        datos["bases_url"] = _completar_url(href, es_oferta=True) if href else ""
 
     # ── Anuncios ───────────────────────────────────────────────────────────────
     # Buscar el h3 "Anuncios" y procesar el bloque siguiente (dl/ul/ol o texto libre)
@@ -482,7 +493,7 @@ def obtener_anios_disponibles() -> list[dict]:
             anio = int(match.group(1))
             if anio not in vistos:
                 vistos.add(anio)
-                url_completa = Config.BASE_URL + href if not href.startswith("http") else href
+                url_completa = _completar_url(href) if href else ""
                 anios.append({"anio": anio, "url": url_completa, "texto": _limpiar_texto(enlace.get_text())})
 
     anios.sort(key=lambda x: x["anio"], reverse=True)
@@ -526,7 +537,7 @@ def obtener_cuadro_anual(anio: int) -> list[dict]:
         id_match  = re.search(r"id=(\d+)", href)
         if id_match:
             oferta_id  = id_match.group(1)
-            url_oferta = Config.BASE_URL + href if not href.startswith("http") else href
+            url_oferta = _completar_url(href, es_oferta=True) if href else ""
 
         key = (
             anio,

@@ -36226,3 +36226,347 @@
 2026-06-10 10:22:02 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
 2026-06-10 10:22:05 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
 2026-06-10 10:22:08 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 11:43:10 [INFO    ] app (__init__.py:30): Iniciando aplicación Oposiciones Zaragoza
+2026-06-10 11:43:10 [INFO    ] app.database.conexion (conexion.py:33): Base de datos inicializada en: c:\Proyectos\zgz-oposiciones\datos\oposiciones.db
+2026-06-10 11:43:11 [DEBUG   ] tzlocal (win32.py:55): Looking up time zone info from registry
+2026-06-10 11:43:11 [INFO    ] apscheduler.scheduler (base.py:507): Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-06-10 11:43:11 [INFO    ] apscheduler.scheduler (base.py:1090): Added job "Scraping semanal automático" to job store "default"
+2026-06-10 11:43:11 [INFO    ] apscheduler.scheduler (base.py:214): Scheduler started
+2026-06-10 11:43:11 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 11:43:11 [DEBUG   ] apscheduler.scheduler (base.py:1258): Next wakeup is due at 2026-06-14 03:00:00+02:00 (in 314208.766639 seconds)
+2026-06-10 11:43:11 [INFO    ] app.services.scheduler (scheduler.py:59): Scheduler iniciado. Próximo scraping automático: 14/06/2026 03:00
+2026-06-10 11:43:11 [INFO    ] app (__init__.py:69): Aplicación lista en http://localhost:5000
+2026-06-10 11:43:20 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-10 11:43:21 [WARNING ] app (__init__.py:61): 404: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2026-06-10 11:43:24 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 11:43:28 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:20:36 [INFO    ] apscheduler.scheduler (base.py:245): Scheduler has been shut down
+2026-06-10 12:20:36 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:20:36 [DEBUG   ] apscheduler.scheduler (base.py:1252): No jobs; waiting until a job is added
+2026-06-10 12:20:36 [INFO    ] app.services.scheduler (scheduler.py:69): Scheduler parado
+2026-06-10 12:20:38 [INFO    ] app (__init__.py:30): Iniciando aplicación Oposiciones Zaragoza
+2026-06-10 12:20:38 [INFO    ] app.database.conexion (conexion.py:33): Base de datos inicializada en: c:\Proyectos\zgz-oposiciones\datos\oposiciones.db
+2026-06-10 12:20:39 [DEBUG   ] tzlocal (win32.py:55): Looking up time zone info from registry
+2026-06-10 12:20:39 [INFO    ] apscheduler.scheduler (base.py:507): Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-06-10 12:20:39 [INFO    ] apscheduler.scheduler (base.py:1090): Added job "Scraping semanal automático" to job store "default"
+2026-06-10 12:20:39 [INFO    ] apscheduler.scheduler (base.py:214): Scheduler started
+2026-06-10 12:20:39 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:20:39 [DEBUG   ] apscheduler.scheduler (base.py:1258): Next wakeup is due at 2026-06-14 03:00:00+02:00 (in 311960.900800 seconds)
+2026-06-10 12:20:39 [INFO    ] app.services.scheduler (scheduler.py:59): Scheduler iniciado. Próximo scraping automático: 14/06/2026 03:00
+2026-06-10 12:20:39 [INFO    ] app (__init__.py:69): Aplicación lista en http://localhost:5000
+2026-06-10 12:20:43 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-10 12:20:44 [WARNING ] app (__init__.py:61): 404: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2026-06-10 12:20:47 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:20:50 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:20:53 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:20:57 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:20:59 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:03 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:05 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:08 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:11 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:15 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:18 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:21 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:24 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:26 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:29 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:32 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:36 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:38 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:42 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:45 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:48 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:51 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:21:57 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:00 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:03 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:06 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:09 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:12 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:15 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:18 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:21 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:24 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:27 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:30 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:33 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:36 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:39 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:42 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:45 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:48 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:51 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:22:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:23:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:24:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:25:54 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-10 12:26:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:27:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:28:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:29:38 [INFO    ] apscheduler.scheduler (base.py:245): Scheduler has been shut down
+2026-06-10 12:29:38 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:29:38 [DEBUG   ] apscheduler.scheduler (base.py:1252): No jobs; waiting until a job is added
+2026-06-10 12:29:38 [INFO    ] app.services.scheduler (scheduler.py:69): Scheduler parado
+2026-06-10 12:29:40 [INFO    ] app (__init__.py:30): Iniciando aplicación Oposiciones Zaragoza
+2026-06-10 12:29:40 [INFO    ] app.database.conexion (conexion.py:33): Base de datos inicializada en: c:\Proyectos\zgz-oposiciones\datos\oposiciones.db
+2026-06-10 12:29:41 [DEBUG   ] tzlocal (win32.py:55): Looking up time zone info from registry
+2026-06-10 12:29:41 [INFO    ] apscheduler.scheduler (base.py:507): Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-06-10 12:29:41 [INFO    ] apscheduler.scheduler (base.py:1090): Added job "Scraping semanal automático" to job store "default"
+2026-06-10 12:29:41 [INFO    ] apscheduler.scheduler (base.py:214): Scheduler started
+2026-06-10 12:29:41 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:29:41 [DEBUG   ] apscheduler.scheduler (base.py:1258): Next wakeup is due at 2026-06-14 03:00:00+02:00 (in 311418.665565 seconds)
+2026-06-10 12:29:41 [INFO    ] app.services.scheduler (scheduler.py:59): Scheduler iniciado. Próximo scraping automático: 14/06/2026 03:00
+2026-06-10 12:29:41 [INFO    ] app (__init__.py:69): Aplicación lista en http://localhost:5000
+2026-06-10 12:29:43 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-10 12:29:44 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:29:46 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:29:49 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:29:52 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:07 [INFO    ] app (__init__.py:30): Iniciando aplicación Oposiciones Zaragoza
+2026-06-10 12:45:07 [INFO    ] app.database.conexion (conexion.py:33): Base de datos inicializada en: c:\Proyectos\zgz-oposiciones\datos\oposiciones.db
+2026-06-10 12:45:07 [DEBUG   ] tzlocal (win32.py:55): Looking up time zone info from registry
+2026-06-10 12:45:07 [INFO    ] apscheduler.scheduler (base.py:507): Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-06-10 12:45:07 [INFO    ] apscheduler.scheduler (base.py:1090): Added job "Scraping semanal automático" to job store "default"
+2026-06-10 12:45:07 [INFO    ] apscheduler.scheduler (base.py:214): Scheduler started
+2026-06-10 12:45:07 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:45:07 [DEBUG   ] apscheduler.scheduler (base.py:1258): Next wakeup is due at 2026-06-14 03:00:00+02:00 (in 310492.277859 seconds)
+2026-06-10 12:45:07 [INFO    ] app.services.scheduler (scheduler.py:59): Scheduler iniciado. Próximo scraping automático: 14/06/2026 03:00
+2026-06-10 12:45:07 [INFO    ] app (__init__.py:69): Aplicación lista en http://localhost:5000
+2026-06-10 12:45:11 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-10 12:45:11 [WARNING ] app (__init__.py:61): 404: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2026-06-10 12:45:15 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:18 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:21 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:24 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:27 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:30 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:33 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:36 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:39 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:42 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:45 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:48 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:51 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:57 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:45:59 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:03 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:05 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:09 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:12 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:15 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:18 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:21 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:24 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:27 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:30 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:33 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:36 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:39 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:42 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:45 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:48 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:51 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:46:57 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:47:00 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:47:03 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:47:06 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:47:49 [INFO    ] apscheduler.scheduler (base.py:245): Scheduler has been shut down
+2026-06-10 12:47:49 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:47:49 [DEBUG   ] apscheduler.scheduler (base.py:1252): No jobs; waiting until a job is added
+2026-06-10 12:47:49 [INFO    ] app.services.scheduler (scheduler.py:69): Scheduler parado
+2026-06-10 12:47:52 [INFO    ] app (__init__.py:30): Iniciando aplicación Oposiciones Zaragoza
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 11: https://www.zaragoza.esverHTMLOferta.jsp?id=1621&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1621&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 12: https://www.zaragoza.esverHTMLOferta.jsp?id=1211&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1211&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 19: https://www.zaragoza.esverHTMLOferta.jsp?id=1740&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1740&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 27: https://www.zaragoza.esverHTMLOferta.jsp?id=1618&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1618&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 29: https://www.zaragoza.esverHTMLOferta.jsp?id=1577&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1577&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 30: https://www.zaragoza.esverHTMLOferta.jsp?id=1673&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1673&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 31: https://www.zaragoza.esverHTMLOferta.jsp?id=1675&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1675&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 32: https://www.zaragoza.esverHTMLOferta.jsp?id=2020&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=2020&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 33: https://www.zaragoza.esverHTMLOferta.jsp?id=1678&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1678&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 34: https://www.zaragoza.esverHTMLOferta.jsp?id=1579&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1579&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 35: https://www.zaragoza.esverHTMLOferta.jsp?id=1674&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1674&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 36: https://www.zaragoza.esverHTMLOferta.jsp?id=1671&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1671&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 37: https://www.zaragoza.esverHTMLOferta.jsp?id=1668&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1668&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 38: https://www.zaragoza.esverHTMLOferta.jsp?id=1597&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1597&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 48: https://www.zaragoza.esverHTMLOferta.jsp?id=1512&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1512&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 59: https://www.zaragoza.esverHTMLOferta.jsp?id=1667&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1667&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 68: https://www.zaragoza.esverHTMLOferta.jsp?id=1367&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1367&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 75: https://www.zaragoza.esverHTMLOferta.jsp?id=1635&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1635&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 94: https://www.zaragoza.esverHTMLOferta.jsp?id=1655&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1655&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 95: https://www.zaragoza.esverHTMLOferta.jsp?id=1552&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1552&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 97: https://www.zaragoza.esverHTMLOferta.jsp?id=1570&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1570&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 98: https://www.zaragoza.esverHTMLOferta.jsp?id=1712&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1712&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 99: https://www.zaragoza.esverHTMLOferta.jsp?id=1565&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1565&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 100: https://www.zaragoza.esverHTMLOferta.jsp?id=1703&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1703&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 101: https://www.zaragoza.esverHTMLOferta.jsp?id=1738&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1738&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 111: https://www.zaragoza.esverHTMLOferta.jsp?id=1775&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1775&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 112: https://www.zaragoza.esverHTMLOferta.jsp?id=1578&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1578&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 113: https://www.zaragoza.esverHTMLOferta.jsp?id=1470&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1470&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 116: https://www.zaragoza.esverHTMLOferta.jsp?id=1744&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1744&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 117: https://www.zaragoza.esverHTMLOferta.jsp?id=1556&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1556&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 118: https://www.zaragoza.esverHTMLOferta.jsp?id=1594&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1594&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 122: https://www.zaragoza.esverHTMLOferta.jsp?id=1548&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1548&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 126: https://www.zaragoza.esverHTMLOferta.jsp?id=1190&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1190&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 128: https://www.zaragoza.esverHTMLOferta.jsp?id=1758&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1758&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 129: https://www.zaragoza.esverHTMLOferta.jsp?id=1733&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1733&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 130: https://www.zaragoza.esverHTMLOferta.jsp?id=1358&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1358&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 132: https://www.zaragoza.esverHTMLOferta.jsp?id=1527&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1527&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 136: https://www.zaragoza.esverHTMLOferta.jsp?id=1595&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1595&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 137: https://www.zaragoza.esverHTMLOferta.jsp?id=1780&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1780&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 139: https://www.zaragoza.esverHTMLOferta.jsp?id=1498&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1498&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 141: https://www.zaragoza.esverHTMLOferta.jsp?id=1370&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1370&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 142: https://www.zaragoza.esverHTMLOferta.jsp?id=1525&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1525&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 164: https://www.zaragoza.esverHTMLOferta.jsp?id=1726&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1726&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 551: https://www.zaragoza.esverHTMLOferta.jsp?id=2034&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=2034&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 898: https://www.zaragoza.esverHTMLOferta.jsp?id=1714&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1714&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 945: https://www.zaragoza.esverHTMLOferta.jsp?id=1680&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1680&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1183: https://www.zaragoza.esverHTMLOferta.jsp?id=1645&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1645&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1184: https://www.zaragoza.esverHTMLOferta.jsp?id=1356&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1356&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1185: https://www.zaragoza.esverHTMLOferta.jsp?id=1759&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1759&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1186: https://www.zaragoza.esverHTMLOferta.jsp?id=1739&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1739&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1187: https://www.zaragoza.esverHTMLOferta.jsp?id=1778&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1778&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1188: https://www.zaragoza.esverHTMLOferta.jsp?id=1695&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1695&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1189: https://www.zaragoza.esverHTMLOferta.jsp?id=1681&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1681&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1190: https://www.zaragoza.esverHTMLOferta.jsp?id=1736&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1736&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1191: https://www.zaragoza.esverHTMLOferta.jsp?id=1467&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1467&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1193: https://www.zaragoza.esverHTMLOferta.jsp?id=1555&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1555&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1195: https://www.zaragoza.esverHTMLOferta.jsp?id=1682&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1682&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1196: https://www.zaragoza.esverHTMLOferta.jsp?id=1692&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1692&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1197: https://www.zaragoza.esverHTMLOferta.jsp?id=1693&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1693&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1198: https://www.zaragoza.esverHTMLOferta.jsp?id=1694&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1694&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1199: https://www.zaragoza.esverHTMLOferta.jsp?id=1599&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1599&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1201: https://www.zaragoza.esverHTMLOferta.jsp?id=1600&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1600&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1202: https://www.zaragoza.esverHTMLOferta.jsp?id=1684&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1684&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1203: https://www.zaragoza.esverHTMLOferta.jsp?id=1441&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1441&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1204: https://www.zaragoza.esverHTMLOferta.jsp?id=1688&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1688&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1205: https://www.zaragoza.esverHTMLOferta.jsp?id=1689&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1689&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1206: https://www.zaragoza.esverHTMLOferta.jsp?id=1505&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1505&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1207: https://www.zaragoza.esverHTMLOferta.jsp?id=1742&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1742&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1210: https://www.zaragoza.esverHTMLOferta.jsp?id=1745&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1745&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1221: https://www.zaragoza.esverHTMLOferta.jsp?id=1360&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1360&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1222: https://www.zaragoza.esverHTMLOferta.jsp?id=1482&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1482&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1223: https://www.zaragoza.esverHTMLOferta.jsp?id=1480&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1480&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1224: https://www.zaragoza.esverHTMLOferta.jsp?id=1542&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1542&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1225: https://www.zaragoza.esverHTMLOferta.jsp?id=1484&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1484&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1226: https://www.zaragoza.esverHTMLOferta.jsp?id=1483&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1483&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1227: https://www.zaragoza.esverHTMLOferta.jsp?id=1481&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1481&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1228: https://www.zaragoza.esverHTMLOferta.jsp?id=1476&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1476&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1229: https://www.zaragoza.esverHTMLOferta.jsp?id=1544&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1544&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1231: https://www.zaragoza.esverHTMLOferta.jsp?id=1365&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1365&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1232: https://www.zaragoza.esverHTMLOferta.jsp?id=1670&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1670&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1233: https://www.zaragoza.esverHTMLOferta.jsp?id=1751&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1751&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1234: https://www.zaragoza.esverHTMLOferta.jsp?id=1478&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1478&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1235: https://www.zaragoza.esverHTMLOferta.jsp?id=1364&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1364&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1236: https://www.zaragoza.esverHTMLOferta.jsp?id=1545&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1545&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1237: https://www.zaragoza.esverHTMLOferta.jsp?id=1362&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1362&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1238: https://www.zaragoza.esverHTMLOferta.jsp?id=1546&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1546&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1239: https://www.zaragoza.esverHTMLOferta.jsp?id=1748&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1748&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1240: https://www.zaragoza.esverHTMLOferta.jsp?id=1708&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1708&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1242: https://www.zaragoza.esverHTMLOferta.jsp?id=1489&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1489&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1243: https://www.zaragoza.esverHTMLOferta.jsp?id=1706&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1706&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1244: https://www.zaragoza.esverHTMLOferta.jsp?id=1562&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1562&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1245: https://www.zaragoza.esverHTMLOferta.jsp?id=1747&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1747&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1246: https://www.zaragoza.esverHTMLOferta.jsp?id=1658&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1658&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1247: https://www.zaragoza.esverHTMLOferta.jsp?id=1568&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1568&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1248: https://www.zaragoza.esverHTMLOferta.jsp?id=1720&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1720&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1249: https://www.zaragoza.esverHTMLOferta.jsp?id=1721&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1721&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1251: https://www.zaragoza.esverHTMLOferta.jsp?id=1490&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1490&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1252: https://www.zaragoza.esverHTMLOferta.jsp?id=1550&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1550&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1253: https://www.zaragoza.esverHTMLOferta.jsp?id=1377&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1377&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1254: https://www.zaragoza.esverHTMLOferta.jsp?id=1716&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1716&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1255: https://www.zaragoza.esverHTMLOferta.jsp?id=1382&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1382&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1256: https://www.zaragoza.esverHTMLOferta.jsp?id=1488&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1488&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1258: https://www.zaragoza.esverHTMLOferta.jsp?id=1189&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1189&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1259: https://www.zaragoza.esverHTMLOferta.jsp?id=1567&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1567&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1260: https://www.zaragoza.esverHTMLOferta.jsp?id=1375&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1375&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1261: https://www.zaragoza.esverHTMLOferta.jsp?id=1553&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1553&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1262: https://www.zaragoza.esverHTMLOferta.jsp?id=1710&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1710&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1263: https://www.zaragoza.esverHTMLOferta.jsp?id=1554&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1554&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1264: https://www.zaragoza.esverHTMLOferta.jsp?id=1564&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1564&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1265: https://www.zaragoza.esverHTMLOferta.jsp?id=1569&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1569&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1266: https://www.zaragoza.esverHTMLOferta.jsp?id=1378&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1378&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1267: https://www.zaragoza.esverHTMLOferta.jsp?id=1722&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1722&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1268: https://www.zaragoza.esverHTMLOferta.jsp?id=1563&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1563&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1269: https://www.zaragoza.esverHTMLOferta.jsp?id=1571&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1571&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1271: https://www.zaragoza.esverHTMLOferta.jsp?id=1718&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1718&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1272: https://www.zaragoza.esverHTMLOferta.jsp?id=1709&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1709&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1273: https://www.zaragoza.esverHTMLOferta.jsp?id=1486&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1486&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1274: https://www.zaragoza.esverHTMLOferta.jsp?id=1592&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1592&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1275: https://www.zaragoza.esverHTMLOferta.jsp?id=1471&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1471&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1278: https://www.zaragoza.esverHTMLOferta.jsp?id=1566&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1566&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1284: https://www.zaragoza.esverHTMLOferta.jsp?id=1728&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1728&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1285: https://www.zaragoza.esverHTMLOferta.jsp?id=1729&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1729&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1286: https://www.zaragoza.esverHTMLOferta.jsp?id=1609&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1609&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1287: https://www.zaragoza.esverHTMLOferta.jsp?id=1573&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1573&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1288: https://www.zaragoza.esverHTMLOferta.jsp?id=1698&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1698&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1289: https://www.zaragoza.esverHTMLOferta.jsp?id=1610&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1610&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1290: https://www.zaragoza.esverHTMLOferta.jsp?id=1685&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1685&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1291: https://www.zaragoza.esverHTMLOferta.jsp?id=1500&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1500&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1292: https://www.zaragoza.esverHTMLOferta.jsp?id=1604&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1604&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1296: https://www.zaragoza.esverHTMLOferta.jsp?id=1656&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1656&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1297: https://www.zaragoza.esverHTMLOferta.jsp?id=1746&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1746&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1301: https://www.zaragoza.esverHTMLOferta.jsp?id=1430&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1430&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1302: https://www.zaragoza.esverHTMLOferta.jsp?id=1357&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1357&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1303: https://www.zaragoza.esverHTMLOferta.jsp?id=1699&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1699&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1305: https://www.zaragoza.esverHTMLOferta.jsp?id=1732&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1732&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1306: https://www.zaragoza.esverHTMLOferta.jsp?id=1731&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1731&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1307: https://www.zaragoza.esverHTMLOferta.jsp?id=1549&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1549&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1311: https://www.zaragoza.esverHTMLOferta.jsp?id=1560&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1560&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1313: https://www.zaragoza.esverHTMLOferta.jsp?id=1756&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1756&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1315: https://www.zaragoza.esverHTMLOferta.jsp?id=1727&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1727&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1316: https://www.zaragoza.esverHTMLOferta.jsp?id=1779&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1779&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1321: https://www.zaragoza.esverHTMLOferta.jsp?id=1757&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1757&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1323: https://www.zaragoza.esverHTMLOferta.jsp?id=1724&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1724&tipo=bases
+2026-06-10 12:47:52 [DEBUG   ] app.database.conexion (conexion.py:138): Normalizada bases_url en oferta 1327: https://www.zaragoza.esverHTMLOferta.jsp?id=1601&tipo=bases → https://www.zaragoza.es/ofertaverHTMLOferta.jsp?id=1601&tipo=bases
+2026-06-10 12:47:52 [INFO    ] app.database.conexion (conexion.py:34): Base de datos inicializada en: c:\Proyectos\zgz-oposiciones\datos\oposiciones.db
+2026-06-10 12:47:52 [DEBUG   ] tzlocal (win32.py:55): Looking up time zone info from registry
+2026-06-10 12:47:52 [INFO    ] apscheduler.scheduler (base.py:507): Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-06-10 12:47:52 [INFO    ] apscheduler.scheduler (base.py:1090): Added job "Scraping semanal automático" to job store "default"
+2026-06-10 12:47:52 [INFO    ] apscheduler.scheduler (base.py:214): Scheduler started
+2026-06-10 12:47:52 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-10 12:47:52 [DEBUG   ] apscheduler.scheduler (base.py:1258): Next wakeup is due at 2026-06-14 03:00:00+02:00 (in 310327.366187 seconds)
+2026-06-10 12:47:52 [INFO    ] app.services.scheduler (scheduler.py:59): Scheduler iniciado. Próximo scraping automático: 14/06/2026 03:00
+2026-06-10 12:47:52 [INFO    ] app (__init__.py:69): Aplicación lista en http://localhost:5000
+2026-06-10 12:47:54 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-10 12:47:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:47:59 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:01 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:05 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:08 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:11 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:14 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:17 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:20 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:22 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:26 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:29 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:32 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:35 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:37 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:41 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:44 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:47 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:50 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:53 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:56 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:48:59 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:02 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:05 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:08 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:11 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:14 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:17 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:20 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:23 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:26 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:29 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:32 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:35 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:38 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:49:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-10 12:50:54 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas

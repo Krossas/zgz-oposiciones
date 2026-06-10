@@ -937,15 +937,18 @@ async function abrirDetalle(ofertaId) {
     <div>
       <div class="campo-label mb-2">📢 Anuncios <span class="badge bg-secondary">${anuncios.length}</span></div>
       ${anuncios.length
-        ? anuncios.map(a => `
+        ? anuncios.map(a => {
+            const url = normalizeZaragozaUrl(a.url);
+            return `
             <div class="d-flex gap-2 py-2 border-bottom">
               <div class="anuncio-fecha">${esc(a.fecha || "")}</div>
               <div class="anuncio-texto">
-                ${a.url
-                  ? `<a href="${a.url}" target="_blank" rel="noopener">${esc(a.texto)}</a>`
+                ${url
+                  ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(a.texto)}</a>`
                   : esc(a.texto)}
               </div>
-            </div>`).join("")
+            </div>`;
+          }).join("")
         : '<div class="text-muted small fst-italic">Sin anuncios publicados aún.</div>'}
     </div>`);
 }
@@ -1061,6 +1064,20 @@ async function api(url, metodo = "GET") {
 function badgeEstado(estado) {
   const [cls, label] = ESTADOS[estado] || ["light text-dark", estado || "—"];
   return `<span class="badge bg-${cls} badge-estado">${label}</span>`;
+}
+
+function normalizeZaragozaUrl(url) {
+  if (!url) return url;
+  try {
+    const texto = String(url).trim();
+    const match = texto.match(/^(https?:\/\/www\.zaragoza\.es)(?:\/?)(verAnuncio\.jsp.*)$/i);
+    if (match) {
+      return `${match[1]}/oferta/${match[2]}`;
+    }
+    return texto;
+  } catch {
+    return url;
+  }
 }
 
 function campo(label, valor, html = false, full = false) {

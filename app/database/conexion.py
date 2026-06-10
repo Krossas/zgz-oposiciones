@@ -29,6 +29,7 @@ def inicializar_base_de_datos():
         conn.executescript(esquema_sql)
         _migrar_esquema(conn)
         _limpiar_duplicados_oferta_anual(conn)
+        _normalizar_urls_oferta(conn)
 
     logger.info("Base de datos inicializada en: %s", Config.DB_PATH)
 
@@ -115,3 +116,35 @@ def _limpiar_duplicados_oferta_anual(conn):
     # Si en el pasado se generaron entradas duplicadas por expediente,
     # quedaron fuera de la limpieza automática para evitar borrar convocatorias
     # legítimas que comparten expediente.
+
+
+def _normalizar_urls_oferta(conn):
+    """Normaliza URLs malformadas en bases_url que falta /oferta/."""
+    import re
+    from urllib.parse import urljoin
+    from app.config import Config
+    
+    # Buscar URLs que comienzan con https://www.zaragoza.es pero NO tienen /oferta/
+    registros = conn.execute(
+        "SELECT id, bases_url FROM oferta WHERE bases_url IS NOT NULL AND bases_url LIKE 'https://www.zaragoza.es%' AND bases_url NOT LIKE '%/oferta/%'"
+    ).fetchall()
+    
+    for record in registros:
+        record_id, bases_url = record[0], record[1]
+        # Reparar la URL: insertar /oferta/ después del dominio
+        fixed_url = bases_url.replace("https://www.zaragoza.es", "https://www.zaragoza.es/oferta", 1)
+        if fixed_url != bases_url:
+            conn.execute("UPDATE oferta SET bases_url = ? WHERE id = ?", (fixed_url, record_id))
+            logger.debug("Normalizada bases_url en oferta %d: %s → %s", record_id, bases_url, fixed_url)
+    
+    # Lo mismo para url (enlaces a fichas de ofertas)
+    registros_url = conn.execute(
+        "SELECT id, url FROM oferta WHERE url IS NOT NULL AND url LIKE 'https://www.zaragoza.es%' AND url NOT LIKE '%/oferta/%'"
+    ).fetchall()
+    
+    for record in registros_url:
+        record_id, url = record[0], record[1]
+        fixed_url = url.replace("https://www.zaragoza.es", "https://www.zaragoza.es/oferta", 1)
+        if fixed_url != url:
+            conn.execute("UPDATE oferta SET url = ? WHERE id = ?", (fixed_url, record_id))
+            logger.debug("Normalizada url en oferta %d: %s → %s", record_id, url, fixed_url)
