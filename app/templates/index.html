@@ -666,7 +666,7 @@ async function cargarFrecuencia() {
 async function cargarTodas() {
   const res = await api("/api/ofertas");
   if (!res?.ok) return;
-  estado.todas = res.datos;
+  estado.todas = Array.isArray(res.datos) ? res.datos : res.datos.items || [];
   // Poblar el filtro de año
   const anios = [...new Set(estado.todas.map(o => o.anio).filter(Boolean))].sort((a,b)=>b-a);
   const sel   = document.getElementById("f-todas-anio");
