@@ -40514,3 +40514,46 @@
 2026-06-16 07:49:17 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
 2026-06-16 07:49:20 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
 2026-06-16 07:49:23 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:49:50 [INFO    ] app (__init__.py:30): Iniciando aplicación Oposiciones Zaragoza
+2026-06-16 07:49:50 [INFO    ] app.database.conexion (conexion.py:34): Base de datos inicializada en: C:\Proyectos\zgz-oposiciones\datos\oposiciones.db
+2026-06-16 07:49:52 [DEBUG   ] tzlocal (win32.py:55): Looking up time zone info from registry
+2026-06-16 07:49:52 [INFO    ] apscheduler.scheduler (base.py:507): Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-06-16 07:49:52 [INFO    ] apscheduler.scheduler (base.py:1090): Added job "Scraping semanal automático" to job store "default"
+2026-06-16 07:49:52 [INFO    ] apscheduler.scheduler (base.py:214): Scheduler started
+2026-06-16 07:49:52 [DEBUG   ] apscheduler.scheduler (base.py:1151): Looking for jobs to run
+2026-06-16 07:49:52 [DEBUG   ] apscheduler.scheduler (base.py:1258): Next wakeup is due at 2026-06-21 03:00:00+02:00 (in 414607.995032 seconds)
+2026-06-16 07:49:52 [INFO    ] app.services.scheduler (scheduler.py:59): Scheduler iniciado. Próximo scraping automático: 21/06/2026 03:00
+2026-06-16 07:49:52 [INFO    ] app (__init__.py:69): Aplicación lista en http://localhost:5000
+2026-06-16 07:49:53 [DEBUG   ] app.utils.cache (cache.py:86): Cache MISS: estadisticas
+2026-06-16 07:49:55 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:49:58 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:49:58 [WARNING ] app (__init__.py:61): 404: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2026-06-16 07:50:01 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:02 [WARNING ] app (__init__.py:61): 404: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2026-06-16 07:50:04 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:07 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:10 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:13 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:16 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:19 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:22 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:25 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:28 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:31 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:34 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:37 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:40 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:43 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:46 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:49 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:52 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:55 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:50:58 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:01 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:04 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:07 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:10 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:14 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:17 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:20 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
+2026-06-16 07:51:23 [DEBUG   ] app.utils.cache (cache.py:82): Cache HIT: estadisticas
